@@ -25,7 +25,7 @@ import java.util.zip.ZipOutputStream;
 @RestController
 public class DownloadTaskService {
 
-    @RequestMapping(path = "tasks/{taskId}/download")
+    @RequestMapping(path = "api/tasks/{taskId}/download")
     public ResponseEntity<StreamingResponseBody> downloadTaskCodeFile(HttpServletResponse response,
                                                              @PathVariable(name = "taskId") String taskId) {
 

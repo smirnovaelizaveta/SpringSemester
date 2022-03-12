@@ -25,7 +25,7 @@ import java.util.zip.ZipInputStream;
 
 public class TasksService {
 
-    @RequestMapping(path = "tasks", method = RequestMethod.GET)
+    @RequestMapping(path = "api/tasks", method = RequestMethod.GET)
     public List<Task> getAllTasks() throws IOException {
 
         List<Task> tasks = Files.walk(Paths.get("src/main/resources/tasks"))
@@ -35,7 +35,7 @@ public class TasksService {
         return tasks;
     }
 
-    @RequestMapping(path = "task/{taskId}", method = RequestMethod.GET)
+    @RequestMapping(path = "api/task/{taskId}", method = RequestMethod.GET)
     public Task getTask(@PathVariable(name = "taskId") String taskId) throws IOException {
         return new Task(taskId);
     }
