@@ -7,6 +7,7 @@ public class Task {
 
     private final String taskId;
     private String taskName;
+    private String taskDescription;
 
     private final String taskCodeFilePath =
             "src/main/resources/tasks/task%1$s.zip";
@@ -29,5 +30,13 @@ public class Task {
 
     public File getTaskCodeFile() {
         return taskCodeFile;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
     }
 }
