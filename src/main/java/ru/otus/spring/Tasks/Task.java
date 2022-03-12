@@ -9,6 +9,10 @@ public class Task {
     private String taskName;
     private String taskDescription;
 
+    private Difficultylevel difficultylevel;
+
+
+
     private final String taskCodeFilePath =
             "src/main/resources/tasks/task%1$s.zip";
 //        "tasks/task%1$s.zip";
