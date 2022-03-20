@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springsemester
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springsemester
+  template:
+    metadata:
+      labels:
+        app: springsemester
+    spec:
+      containers:
+        - name: springsemester-pod
+          image: springsemester-backend:1.0.0
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    visualize: "true"
+  name: springsemester-service
+spec:
+  selector:
+    app: springsemester
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
