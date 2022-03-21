@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.springsemester</groupId>
-    <artifactId>springSemester</artifactId>
+    <artifactId>springsemester</artifactId>
     <version>1.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
+        <version>2.4.0</version>
     </parent>
 
     <properties>

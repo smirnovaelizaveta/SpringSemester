@@ -12,7 +12,6 @@ import ru.otus.spring.domain.book.Book;
 import ru.otus.spring.domain.book.BookGenre;
 import ru.otus.spring.rest.dto.BookDto;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -48,13 +47,13 @@ public class BookController {
     }
 
     @PostMapping("/api/books")
-    public Book addBook(@Valid @RequestBody BookDto bookDto) {
+    public Book addBook(@RequestBody BookDto bookDto) {
         log.info("Request to create book: {}", bookDto);
         return bookService.update(bookDto);
     }
 
     @PutMapping("/api/books/{id}")
-    public Book addBook(@Valid @RequestBody BookDto bookDto, @PathVariable Long id) {
+    public Book addBook(@RequestBody BookDto bookDto, @PathVariable Long id) {
         bookDto.setId(id);
         log.info("Request to edit book: {}", bookDto);
         return bookService.update(bookDto);
