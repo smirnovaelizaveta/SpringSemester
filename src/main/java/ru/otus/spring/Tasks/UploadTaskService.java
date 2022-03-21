@@ -32,7 +32,7 @@ public class UploadTaskService {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @PostMapping("/uploadFile")
+    @PostMapping("/api/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
 //        String text = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         System.out.println("file = " + file.getName());

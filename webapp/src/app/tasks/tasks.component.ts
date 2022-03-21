@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Task, Status } from '../task';
 import { TasksService } from './tasks.service'
 
@@ -11,7 +11,7 @@ export class TasksComponent implements OnInit {
 
   public Status: any = Status;
 
-  tasks?: Task[]
+  tasks?: Task[];
 
   constructor(private tasksService: TasksService) { }
 
@@ -36,5 +36,15 @@ export class TasksComponent implements OnInit {
             document.body.appendChild(downloadLink);
             downloadLink.click();
         });
+  }
+
+  upload(event: any) {
+      const file:File = event.target.files[0];
+
+      if (file) {
+          const formData = new FormData();
+          formData.append("file", file);
+          this.tasksService.uploadCode(formData).subscribe();
+      }
   }
 }

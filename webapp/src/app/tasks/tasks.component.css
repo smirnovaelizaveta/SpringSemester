@@ -9,3 +9,7 @@ mat-sidenav {
 mat-card {
 	margin:  5px;
 }
+
+.file-input {
+  display: none;
+}

@@ -20,11 +20,16 @@ public class Task {
 
     public Task(String taskId) {
         this.taskId = taskId;
+        this.taskName = "Task #"+taskId;
+        this.taskDescription = String.format("Task #%s description. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", taskId);
         this.taskCodeFile = new File(String.format(taskCodeFilePath, taskId));
     }
 
     public Task(File taskCodeFile) {
-        this.taskId = taskCodeFile.getName().replaceAll("\\D+","");
+        String taskId = taskCodeFile.getName().replaceAll("\\D+","");
+        this.taskId = taskId;
+        this.taskName = "Task #"+taskId;
+        this.taskDescription = String.format("Task #%s description. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", taskId);
         this.taskCodeFile = taskCodeFile;
     }
 

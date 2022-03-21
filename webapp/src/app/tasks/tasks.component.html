@@ -26,7 +26,9 @@
             </mat-card-content>
             <mat-card-actions>
                 <button mat-button (click)="download(selectedTask)">DOWNLOAD PROJECT</button>
-                <button mat-button>UPLOAD PROJECT</button>
+                <button mat-button (click)="fileUpload.click()">UPLOAD PROJECT</button>
+                <!-- <span *ngIf="uploadFile">File: {{uploadFile}}</span> -->
+                <input type="file" class="file-input" (change)="upload($event)" #fileUpload>
             </mat-card-actions>
           </div>
           <ng-template #selectPrompt>
