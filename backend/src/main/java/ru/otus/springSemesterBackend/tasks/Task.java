@@ -11,19 +11,23 @@ import java.io.File;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "tasks")
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(unique = true, nullable = false)
     private Long id;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "id")
+    private TaskInfo taskInfo;
 //    private String name;
 //    private String description;
 //    private Integer difficultylevel;
 
-    @OneToOne(targetEntity = TaskInfo.class, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "task_id")
-    private TaskInfo taskInfo;
+//    @OneToOne(targetEntity = TaskInfo.class, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "task_id")
+//    private TaskInfo taskInfo;
     @Column(columnDefinition="blob")
     private byte[] taskCode;
 
@@ -51,4 +55,10 @@ public class Task {
         this.taskInfo = taskInfo;
         this.taskCode = taskCode;
     }
+
+//    public Task(String name, String description, Integer difficultylevel, byte[] taskCode) {
+//        this.name = name;
+//        this.description = description;
+//        this.difficultylevel = difficultylevel;
+//    }
 }

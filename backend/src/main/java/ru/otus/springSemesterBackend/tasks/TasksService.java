@@ -27,7 +27,7 @@ public class TasksService {
     @Autowired
     private TaskInfoRepository taskInfoRepository;
 
-    @RequestMapping(path = "api/tasks", method = RequestMethod.GET)
+    @RequestMapping(path = "api/task", method = RequestMethod.GET)
     public List<TaskInfo> getAllTasks() throws IOException {
         return taskInfoRepository.findAll();
     }

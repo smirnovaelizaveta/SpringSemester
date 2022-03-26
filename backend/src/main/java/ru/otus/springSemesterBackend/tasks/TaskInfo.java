@@ -14,8 +14,13 @@ import javax.persistence.*;
 public class TaskInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long task_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(unique = true, nullable = false)
+    private Long id;
+
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "task")
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private Task task;
     private String name;
     private String description;
     private Integer difficultylevel;
