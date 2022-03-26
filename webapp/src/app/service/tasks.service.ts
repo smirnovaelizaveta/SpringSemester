@@ -5,7 +5,8 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { Task, Status } from '../task';
+import { Task, Status } from '../model/task';
+import { MOCK_PROJECT } from '../mock/project';
 // import { MessageService } from './message.service';
 
 
@@ -18,7 +19,7 @@ interface TaskDto {
 @Injectable({ providedIn: 'root' })
 export class TasksService {
 
-  private tasksUrl = 'api/tasks'; 
+  private tasksUrl = 'api/tasks/'; 
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -33,7 +34,13 @@ export class TasksService {
     return this.http.get<TaskDto[]>(this.tasksUrl)
       .pipe(
         // tap(_ => this.log('fetched heroes')),
-        map((taskDtos) => taskDtos.map((dto) => Object({id: dto.taskId, name: dto.taskName, description: dto.taskDescription}) as Task))
+        map((taskDtos) => taskDtos.map((dto) => Object(
+          {
+            id: dto.taskId,
+            name: dto.taskName,
+            description: dto.taskDescription,
+            project: MOCK_PROJECT
+          }) as Task))
         // catchError(this.handleError<Task[]>('getTasks', []))
       );
   }
