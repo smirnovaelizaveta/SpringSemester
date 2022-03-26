@@ -11,15 +11,16 @@ import { MOCK_PROJECT } from '../mock/project';
 
 
 interface TaskDto {
-  taskId: string,
-  taskName: string,
-  taskDescription: string
+  id: number,
+  name: string,
+  description: string,
+  difficultylevel: number
 }
 
 @Injectable({ providedIn: 'root' })
 export class TasksService {
 
-  private tasksUrl = 'api/tasks/'; 
+  private taskUrl = 'api/task/'; 
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -31,26 +32,31 @@ export class TasksService {
 
   /** GET heroes from the server */
   getTasks(): Observable<Task[]> {
-    return this.http.get<TaskDto[]>(this.tasksUrl)
+    return this.http.get<TaskDto[]>(this.taskUrl)
       .pipe(
         // tap(_ => this.log('fetched heroes')),
         map((taskDtos) => taskDtos.map((dto) => Object(
           {
-            id: dto.taskId,
-            name: dto.taskName,
-            description: dto.taskDescription,
+            id: dto.id,
+            name: dto.name,
+            description: dto.description,
+            difficultyLevel: dto.difficultylevel,
             project: MOCK_PROJECT
           }) as Task))
         // catchError(this.handleError<Task[]>('getTasks', []))
       );
   }
 
-  downloadCode(taskId: string): Observable<any> {
-    return this.http.get(this.tasksUrl+`/${taskId}/download`,  { responseType: 'blob' });
+  downloadCode(taskId: number): Observable<any> {
+    return this.http.get(this.taskUrl+`${taskId}/zip`,  { responseType: 'blob' });
   }
 
   uploadCode(formData: FormData): Observable<any> {
-    return this.http.post('/api/uploadFile', formData)
+    return this.http.post('/api/solution', formData)
+  }
+
+  uploadTask(formData: FormData): Observable<any> {
+    return this.http.post(this.taskUrl, formData)
   }
   /**
    * Handle Http operation that failed.

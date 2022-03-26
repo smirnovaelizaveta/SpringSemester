@@ -33,9 +33,10 @@ export class EditorComponent implements OnInit,  AfterViewInit  {
     this.tasksService.getTasks()
     .subscribe(
       (tasks: Task[]) => {
+        console.log(tasks);
         this.tasks = tasks;
         this.route.params.subscribe(routeParams => {
-          const taskId = routeParams['taskId'];
+          const taskId: number = +routeParams['taskId'];
           this.selectedTask = this.tasks!.find((task: Task) => task.id === taskId);
           const data = this.selectedTask!.project.files;
           this.dataSource.data = data;

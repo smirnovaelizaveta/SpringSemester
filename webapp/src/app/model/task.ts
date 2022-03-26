@@ -1,10 +1,11 @@
 import { Project } from './project';
 
 export interface Task {
-  id: string;
+  id: number;
   name: string;
   description: string;
   status: Status;
+  difficultyLevel: number;
   project: Project;
 }
 

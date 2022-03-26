@@ -28,8 +28,8 @@
 
     <mat-card class="editor" *ngIf="selectedTask">
       <mat-card-content>
-          <div fxLayout="row">
-            <div fxFlex="25">
+          <div fxLayout=”row” >
+            <div class="tree-container" fxFlex="25">
               <mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
                 <!-- This is the tree node template for leaf nodes -->
                 <!-- There is inline padding applied to this node using styles.
@@ -60,7 +60,7 @@
                 </mat-nested-tree-node>
               </mat-tree>
             </div>
-            <div fxFlex="75">
+            <div class="code-container" fxFlex="75">
                 <ngx-codemirror *ngIf="selectedFile && selectedFile.contents" fxFlex="100"
                   [(ngModel)]="selectedFile.contents"
                   [options]="{

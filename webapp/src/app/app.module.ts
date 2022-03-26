@@ -13,6 +13,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree'; 
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatInputModule } from '@angular/material/input'; 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { EditorComponent } from './editor/editor.component'; 
 import { TasksComponent } from './tasks/tasks.component';
@@ -49,6 +51,8 @@ const routes: Routes = [
     MatIconModule,
     MatToolbarModule,
     MatTreeModule,
+    MatFormFieldModule,
+    MatInputModule,
     FormsModule,
     CodemirrorModule,
     RouterModule.forRoot(routes)
