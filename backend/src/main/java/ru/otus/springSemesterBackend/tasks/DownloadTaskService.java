@@ -1,5 +1,6 @@
 package ru.otus.springSemesterBackend.tasks;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import ru.otus.springSemesterBackend.tasks.taskRepository.TaskRepository;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -69,5 +71,44 @@ public class DownloadTaskService {
         response.addHeader("Expires", "0");
 
         return ResponseEntity.ok(stream);
+    }
+
+    @RequestMapping(path = "api/task/{taskId}/project-tree")
+    public ResponseEntity<StreamingResponseBody> getProjectTree(HttpServletResponse response,
+                                                                      @PathVariable(name = "taskId") Long taskId) {
+//
+//
+//        Task task = taskRepository.findById(taskId)
+////                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+//                .orElseThrow(()->new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
+//
+//        Path write = null;
+//        try {
+//            write = Files.write(Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task"+taskId), task.getTaskCode());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        try {
+            Files.walk(Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task"+taskId))
+    //                .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .forEach(System.out::println);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+//        StreamingResponseBody stream = out -> {
+//            out.write(task.getTaskCode());
+//
+//        };
+//
+//        response.setContentType("application/zip");
+//        response.setHeader("Content-Disposition", "attachment; filename=" + task.getTaskInfo().getName()+".zip");
+//        response.addHeader("Pragma", "no-cache");
+//        response.addHeader("Expires", "0");
+
+        return null;
     }
 }
