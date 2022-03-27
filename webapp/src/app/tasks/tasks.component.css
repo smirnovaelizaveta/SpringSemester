@@ -1,15 +1,7 @@
-mat-sidenav {
-	width:  20%;
-}
-
-.container {
-	height: 100%;
+.file-input {
+  display: none;
 }
 
 mat-card {
-	margin:  5px;
-}
-
-.file-input {
-  display: none;
+  margin:  5px;
 }

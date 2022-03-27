@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Task, Status } from '../task';
-import { TasksService } from './tasks.service'
+import { Component, OnInit } from '@angular/core';
+import { TasksService } from '../service/tasks.service';
+import { Status, Task } from '../model/task';
 
 @Component({
   selector: 'app-tasks',
@@ -8,12 +8,13 @@ import { TasksService } from './tasks.service'
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
+  constructor(private tasksService: TasksService) { }
 
   public Status: any = Status;
-
   tasks?: Task[];
-
-  constructor(private tasksService: TasksService) { }
+  name: string = "";
+  description: string = "";
+  difficultyLevel: number = 1;
 
   ngOnInit(): void {
     this.getTasks()
@@ -24,27 +25,23 @@ export class TasksComponent implements OnInit {
     .subscribe(tasks => this.tasks = tasks);
   }
 
-  download(task: Task, format: String = "zip"): void {
-    this.tasksService.downloadCode(task.id)
-      .subscribe((response: any) =>{
-            let dataType = response.type;
-            let binaryData = [];
-            binaryData.push(response);
-            let downloadLink = document.createElement('a');
-            downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
-            downloadLink.setAttribute('download', `task${task.id}.${format}`);
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-        });
-  }
-
   upload(event: any) {
       const file:File = event.target.files[0];
 
       if (file) {
           const formData = new FormData();
           formData.append("file", file);
-          this.tasksService.uploadCode(formData).subscribe();
+          formData.append("name", this.name);
+          formData.append("description", this.description);
+          formData.append("difficultylevel", ""+this.difficultyLevel);
+          console.log(formData);
+          console.log("file", file);
+          console.log("name", this.name);
+          console.log("description", this.description);
+          console.log("difficultylevel", ""+this.difficultyLevel);
+          this.tasksService.uploadTask(formData).subscribe(
+            () => this.getTasks()
+          );
       }
   }
 }
