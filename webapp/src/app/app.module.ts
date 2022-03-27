@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,24 +19,16 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { EditorComponent } from './editor/editor.component'; 
 import { TasksComponent } from './tasks/tasks.component';
 import { Routes, RouterModule } from '@angular/router';
+import { LoginComponent } from './login/login.component';
 
-const routes: Routes = [
-  {
-    path: 'tasks/:taskId', component: EditorComponent
-  },
-  {
-    path: 'tasks', component: TasksComponent
-  },
-  {
-    path: '', redirectTo: '/tasks', pathMatch: 'full' 
-  }
-];
+
 
 @NgModule({
   declarations: [
     AppComponent,
     TasksComponent,
-    EditorComponent
+    EditorComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -54,8 +46,8 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
+    ReactiveFormsModule,
     CodemirrorModule,
-    RouterModule.forRoot(routes)
   ],
   exports: [RouterModule],
   providers: [],

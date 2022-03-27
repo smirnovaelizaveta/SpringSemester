@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { TasksService } from '../service/tasks.service';
 import { Status, Task } from '../model/task';
 import { Project, ProjectFile } from '../model/project';
+import { MOCK_PROJECT } from '../mock/project';
 import { ActivatedRoute } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
@@ -38,10 +39,22 @@ export class EditorComponent implements OnInit,  AfterViewInit  {
         this.route.params.subscribe(routeParams => {
           const taskId: number = +routeParams['taskId'];
           this.selectedTask = this.tasks!.find((task: Task) => task.id === taskId);
-          const data = this.selectedTask!.project.files;
-          this.dataSource.data = data;
-          this.treeControl.dataNodes = data;
-          this.treeControl.expandAll();
+          this.tasksService.getProjectTree(this.selectedTask!.id)
+            .subscribe(
+              project => {
+                const data = project.files;
+                this.dataSource.data = data;
+                this.treeControl.dataNodes = data;
+                this.treeControl.expandAll();
+              },
+              err => {
+                const data = MOCK_PROJECT.files;
+                this.dataSource.data = data;
+                this.treeControl.dataNodes = data;
+                this.treeControl.expandAll();
+              }
+            )
+          
         });
       }
     );

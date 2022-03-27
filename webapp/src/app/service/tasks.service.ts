@@ -6,7 +6,8 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Task, Status } from '../model/task';
-import { MOCK_PROJECT } from '../mock/project';
+import { Project } from '../model/project';
+// import { MOCK_PROJECT } from '../mock/project';
 // import { MessageService } from './message.service';
 
 
@@ -40,8 +41,8 @@ export class TasksService {
             id: dto.id,
             name: dto.name,
             description: dto.description,
-            difficultyLevel: dto.difficultylevel,
-            project: MOCK_PROJECT
+            difficultyLevel: dto.difficultylevel
+            // project: MOCK_PROJECT
           }) as Task))
         // catchError(this.handleError<Task[]>('getTasks', []))
       );
@@ -49,6 +50,13 @@ export class TasksService {
 
   downloadCode(taskId: number): Observable<any> {
     return this.http.get(this.taskUrl+`${taskId}/zip`,  { responseType: 'blob' });
+  }
+
+  getProjectTree(taskId: number): Observable<Project> {
+    return this.http.get(this.taskUrl+`${taskId}/project-tree`)
+      .pipe(
+        map((result) => result as Project)
+      );
   }
 
   uploadCode(formData: FormData): Observable<any> {

@@ -6,7 +6,6 @@ export interface Task {
   description: string;
   status: Status;
   difficultyLevel: number;
-  project: Project;
 }
 
 export enum Status {
