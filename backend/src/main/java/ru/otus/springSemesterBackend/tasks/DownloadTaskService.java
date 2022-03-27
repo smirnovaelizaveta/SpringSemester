@@ -90,7 +90,7 @@ public class DownloadTaskService {
 //        }
 
         try {
-            Files.walk(Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task"+taskId))
+            Files.walkFileTree(Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task"+taskId))
     //                .filter(Files::isRegularFile)
                     .map(Path::toFile)
                     .forEach(System.out::println);
