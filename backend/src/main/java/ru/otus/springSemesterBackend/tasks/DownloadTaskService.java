@@ -13,9 +13,13 @@ import ru.otus.springSemesterBackend.tasks.taskRepository.TaskRepository;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
+import java.util.TreeSet;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -74,7 +78,7 @@ public class DownloadTaskService {
     }
 
     @RequestMapping(path = "api/task/{taskId}/project-tree")
-    public ResponseEntity<StreamingResponseBody> getProjectTree(HttpServletResponse response,
+    public String getProjectTree(HttpServletResponse response,
                                                                       @PathVariable(name = "taskId") Long taskId) {
 //
 //
@@ -88,15 +92,50 @@ public class DownloadTaskService {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
+//
+//        try {
+//            Files.walkFileTree(Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task"+taskId))
+//    //                .filter(Files::isRegularFile)
+//                    .map(Path::toFile)
+//                    .forEach(System.out::println);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
-        try {
-            Files.walkFileTree(Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task"+taskId))
-    //                .filter(Files::isRegularFile)
-                    .map(Path::toFile)
-                    .forEach(System.out::println);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        //treesets to hold paths alphabetically
+        Path rootDirPath = Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task" + taskId);
+        Tree.Node node =
+walk(rootDirPath.toString());
+//        Gson gson = new Gson();
+        //        TreeSet<Path> paths = new TreeSet<>();
+//        try {
+//            Files.walkFileTree(rootDirPath, new SimpleFileVisitor<Path>() {
+//
+//
+//                @Override
+//                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+//                    paths.add(dir);
+//                    return super.preVisitDirectory(rootDirPath, attrs);
+//                }
+//                @Override
+//                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+//                    paths.add(file);
+//                    return super.visitFile(rootDirPath, attrs);
+//                }
+//                @Override
+//                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+//                    return super.visitFileFailed(file, exc);
+//                }
+//                @Override
+//                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+//                    return super.postVisitDirectory(rootDirPath, exc);
+//                }
+//            });
+//            //I'm printing the contents alphabetically,.. your impl might vary
+//            paths.forEach(System.out::println);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
 //        StreamingResponseBody stream = out -> {
@@ -110,5 +149,28 @@ public class DownloadTaskService {
 //        response.addHeader("Expires", "0");
 
         return null;
+    }
+
+    private Tree.Node walk( String path ) {
+
+
+        File root = new File( path );
+        Tree.Node node = new Tree.Node(root);
+        File[] list = root.listFiles();
+
+        if (list == null) return node;
+
+        for ( File f : list ) {
+            if ( f.isDirectory() ) {
+                node.addChildren(node, new Tree.Node<>(f));
+                walk( f.getAbsolutePath() );
+                System.out.println( "Dir:" + f.getAbsoluteFile() );
+            }
+            else {
+                node.addChildren(node, new Tree.Node<>(f));
+                System.out.println( "File:" + f.getAbsoluteFile() );
+            }
+        }
+        return node;
     }
 }

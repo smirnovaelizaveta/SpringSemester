@@ -60,6 +60,13 @@
             <version>1.18.22</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+
+
         <!-- Spring Security -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
