@@ -1,5 +1,7 @@
 package ru.otus.springSemesterBackend.userService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +16,18 @@ import java.util.Base64;
 @CrossOrigin
 public class UserController {
 
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    public UserController(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @RequestMapping("/login")
     public boolean login(@RequestBody User user) {
-        return
-                user.getUsername().equals("user") && user.getPassword().equals("password");
+        return userDetailsService.loadUserByUsername(user.getUsername()).getPassword().equals(user.getPassword());
+//        return
+//                user.getUsername().equals("user") && user.getPassword().equals("password");
     }
 
     @RequestMapping("/user")
