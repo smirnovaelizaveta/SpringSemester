@@ -2,10 +2,7 @@ package ru.otus.springSemesterBackend.userService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.springSemesterBackend.domain.user.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +20,7 @@ public class UserController {
         this.userDetailsService = userDetailsService;
     }
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public boolean login(@RequestBody User user) {
         return userDetailsService.loadUserByUsername(user.getUsername()).getPassword().equals(user.getPassword());
 //        return
