@@ -35,19 +35,58 @@ package ru.otus.taskChecker;
 //    }
 //}
 
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.EnableKafka;
 import ru.otus.taskChecker.taskChecker.TaskChecker;
 
+import java.io.File;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 @Slf4j
 @EnableKafka
 @SpringBootApplication
-
 public class Main {
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
-        new TaskChecker().method(null);
+        String dockerfile = "resources/ComponentAnnotation/Dockerfile";
+        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
+
+        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+                .dockerHost(config.getDockerHost())
+                .sslConfig(config.getSSLConfig())
+                .maxConnections(100)
+                .connectionTimeout(Duration.ofSeconds(30))
+                .responseTimeout(Duration.ofSeconds(45))
+                .build();
+
+        DockerHttpClient.Request request = DockerHttpClient.Request.builder()
+                .method(DockerHttpClient.Request.Method.GET)
+                .path("/_ping")
+                .build();
+
+        DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
+
+        try (DockerHttpClient.Response response = httpClient.execute(request)) {
+            System.out.println("BUNS "+response.getStatusCode());
+            System.out.println("BUNS "+response.getBody());
+        }
+
+        Object response = dockerClient.buildImageCmd(new File(dockerfile))
+                .withTags(Set.of("buns:0.0.1"))
+                .start().awaitImageId();
+
+        dockerClient.logContainerCmd("").exec(new Ob);
+
+        System.out.println("BUNSBUNS"+response);
     }
 }
