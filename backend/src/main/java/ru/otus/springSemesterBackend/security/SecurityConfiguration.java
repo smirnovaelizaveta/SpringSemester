@@ -22,21 +22,34 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
     }
 
 
-    @Override
-    protected void configure(final HttpSecurity http)
-            throws Exception {
+//    @Override
+//    protected void configure(final HttpSecurity http)
+//            throws Exception {
+//
+//        http
+//                .csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/css/**").permitAll() //Adding this line solved it
+//                .antMatchers("/login").permitAll()
+////                .antMatchers("/login").anonymous()
+////                .antMatchers("/api/**").anonymous()
+//                .antMatchers(HttpMethod.DELETE, "/api/books/*").hasAuthority("ADMIN")
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//        ;
+//    }
 
-        http
-                .csrf().disable()
+    @Override
+    protected void configure(HttpSecurity http)
+            throws Exception {
+        http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/css/**").permitAll() //Adding this line solved it
-//                .antMatchers("/login").anonymous()
-                .antMatchers("/api/**").anonymous()
-                .antMatchers(HttpMethod.DELETE, "/api/books/*").hasAuthority("ADMIN")
-                .anyRequest().authenticated()
+                .antMatchers("/login").permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
-                .formLogin()
-        ;
+                .httpBasic();
     }
 
     @SuppressWarnings("deprecation")

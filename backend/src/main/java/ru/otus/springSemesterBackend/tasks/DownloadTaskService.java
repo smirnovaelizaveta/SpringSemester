@@ -1,8 +1,7 @@
 package ru.otus.springSemesterBackend.tasks;
 
-import org.apache.commons.io.FileUtils;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,13 +12,7 @@ import ru.otus.springSemesterBackend.tasks.taskRepository.TaskRepository;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Date;
-import java.util.TreeSet;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -104,9 +97,9 @@ public class DownloadTaskService {
 
         //treesets to hold paths alphabetically
         Path rootDirPath = Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task" + taskId);
-        Tree.Node node =
-walk(rootDirPath.toString());
-//        Gson gson = new Gson();
+        Tree.Node node = walk(rootDirPath.toString());
+        System.out.println("kek"+node.children);
+        Gson gson = new Gson();
         //        TreeSet<Path> paths = new TreeSet<>();
 //        try {
 //            Files.walkFileTree(rootDirPath, new SimpleFileVisitor<Path>() {
@@ -148,26 +141,25 @@ walk(rootDirPath.toString());
 //        response.addHeader("Pragma", "no-cache");
 //        response.addHeader("Expires", "0");
 
-        return null;
+        return gson.toJson(node);
     }
 
     private Tree.Node walk( String path ) {
 
 
         File root = new File( path );
-        Tree.Node node = new Tree.Node(root);
+        Tree.Node node = new Tree.Node(root.getName());
         File[] list = root.listFiles();
 
         if (list == null) return node;
 
         for ( File f : list ) {
             if ( f.isDirectory() ) {
-                node.addChildren(node, new Tree.Node<>(f));
-                walk( f.getAbsolutePath() );
+                node.addChild( walk( f.getAbsolutePath() ));
                 System.out.println( "Dir:" + f.getAbsoluteFile() );
             }
             else {
-                node.addChildren(node, new Tree.Node<>(f));
+                node.addChild(new Tree.Node<>(f.getName()));
                 System.out.println( "File:" + f.getAbsoluteFile() );
             }
         }
