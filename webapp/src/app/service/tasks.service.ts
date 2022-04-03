@@ -7,7 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { Task, Status } from '../model/task';
 import { Project } from '../model/project';
-// import { MOCK_PROJECT } from '../mock/project';
+import { MOCK_PROJECT } from '../mock/project';
 // import { MessageService } from './message.service';
 
 
@@ -35,16 +35,14 @@ export class TasksService {
   getTasks(): Observable<Task[]> {
     return this.http.get<TaskDto[]>(this.taskUrl)
       .pipe(
-        // tap(_ => this.log('fetched heroes')),
         map((taskDtos) => taskDtos.map((dto) => Object(
           {
             id: dto.id,
             name: dto.name,
             description: dto.description,
-            difficultyLevel: dto.difficultylevel
-            // project: MOCK_PROJECT
+            difficultyLevel: dto.difficultylevel,
+            project: MOCK_PROJECT
           }) as Task))
-        // catchError(this.handleError<Task[]>('getTasks', []))
       );
   }
 
@@ -55,7 +53,7 @@ export class TasksService {
   getProjectTree(taskId: number): Observable<Project> {
     return this.http.get(this.taskUrl+`${taskId}/project-tree`)
       .pipe(
-        map((result) => result as Project)
+        map((result) => MOCK_PROJECT as Project)
       );
   }
 

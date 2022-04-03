@@ -1,0 +1,11 @@
+.container {
+	/*height:  100%;*/
+}
+
+.error {
+	color:  red;
+}
+
+mat-card {
+	text-align: center;
+}

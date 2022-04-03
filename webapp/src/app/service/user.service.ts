@@ -18,11 +18,11 @@ export class UserService {
   ) { }
 
   getCurrentUser(): Observable<User> {
-    return this.http.get("sample url");
+    return this.http.get("user");
   }
 
   login(login: string, password: string): Observable<any> {
-    return this.http.post("sample url", {login: login, password: password});
+    return this.http.post("login", {username: login, password: password});
   }
 
   logout(): Observable<any> {

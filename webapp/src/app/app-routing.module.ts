@@ -12,7 +12,7 @@ const routes: Routes = [
     path: 'tasks', component: TasksComponent
   },
   {
-    path: 'login', component: LoginComponent
+    path: 'sign-in', component: LoginComponent
   },
   {
     path: '', redirectTo: '/tasks', pathMatch: 'full' 

@@ -15,19 +15,35 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   form: FormGroup = new FormGroup({
       username: new FormControl(''),
       password: new FormControl(''),
-    });
+  });
 
-    submit() {
-      if (this.form.valid) {
-        this.userService.login(this.form.value.username, this.form.value.password)
-          .subscribe(() => {}, err => {this.router.navigate(["/tasks"])})
-      }
+  error: string | undefined;
+
+  submit() {
+    if (this.form.valid) {
+      this.userService.login(this.form.value.username, this.form.value.password)
+        .subscribe(
+          isValid => {
+            console.log(isValid);
+              if (isValid) {
+                  sessionStorage.setItem('token', btoa(this.form.value.username + ':' + this.form.value.password));
+              this.router.navigate(["/tasks"]);
+            } else {
+                this.error = "Wrong password.";
+            }
+          },
+          error => {
+            if (error.status === 401) {
+              this.error = "User not found."
+            }
+          }
+        )
     }
-    @Input() error: string | undefined;
+  }
 }
