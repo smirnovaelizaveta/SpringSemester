@@ -8,9 +8,6 @@ import ru.otus.springSemesterBackend.domain.user.User;
 @Service
 public class DefaultUserService implements UserService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     private final UserRepository userRepository;
 
     public DefaultUserService(UserRepository userRepository) {
@@ -19,7 +16,6 @@ public class DefaultUserService implements UserService {
 
     @Override
     public void insert(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 }

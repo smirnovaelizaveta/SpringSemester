@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.springSemesterBackend.tasks.taskRepository.TaskInfoRepository;
 import ru.otus.springSemesterBackend.tasks.taskRepository.TaskRepository;
+import ru.otus.springSemesterBackend.userService.UserRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +27,12 @@ public class TasksService {
     private TaskRepository taskRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    private UserSolutionStatusRepository userSolutionStatusRepository;
+
+    @Autowired
     private TaskInfoRepository taskInfoRepository;
 
     @RequestMapping(path = "api/task", method = RequestMethod.GET)
@@ -33,10 +41,16 @@ public class TasksService {
     }
 
     @RequestMapping(path = "api/task/{taskId}", method = RequestMethod.GET)
-    public ResponseEntity getTask(@PathVariable(name = "taskId") Long taskId) throws IOException {
+    public ResponseEntity getTask(@PathVariable(name = "taskId") Long taskId, Principal principal) throws IOException {
 
-        return taskRepository.findById(taskId)
-                .map(result -> new ResponseEntity<>(result, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return
+                taskRepository.findById(taskId)
+                        .map(task -> {
+                            UserSolutionStatus userSolutionStatus = userSolutionStatusRepository.findByTaskAndUser(task, userRepository.findByUsername(principal.getName()));
+                            return new ResponseEntity<>(new TaskDto(task.getTaskInfo().getName(), task.getTaskInfo().getDescription(), task.getTaskInfo().getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()), HttpStatus.OK);
+                        })
+                        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+
     }
 }

@@ -9,6 +9,7 @@ import ru.otus.springSemesterBackend.domain.user.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class DefaultUserPrincipal
@@ -22,11 +23,11 @@ public class DefaultUserPrincipal
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Role> roles = user.getRoles();
+        List<Role> roles = Collections.singletonList(user.getRole());
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority(role.name()));
         }
 
         return authorities;

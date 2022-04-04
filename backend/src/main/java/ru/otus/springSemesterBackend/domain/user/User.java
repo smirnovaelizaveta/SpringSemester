@@ -3,10 +3,8 @@ package ru.otus.springSemesterBackend.domain.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.springSemesterBackend.tasks.TaskInfo;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,10 +13,10 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
-    public User(String username, String password, List<Role> roles) {
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 
     @Id
@@ -30,8 +28,7 @@ public class User {
 
     private String password;
 
-    @OneToMany(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private Role role;
 
 
 }

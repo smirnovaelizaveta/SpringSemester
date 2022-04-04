@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.springSemesterBackend.domain.user.Role;
 import ru.otus.springSemesterBackend.domain.user.User;
@@ -24,14 +25,17 @@ public class UserController {
     private final DefaultUserService userService;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     public UserController(UserDetailsService userDetailsService, DefaultUserService userService) {
         this.userDetailsService = userDetailsService;
         this.userService = userService;
     }
 
     @PostMapping("api/login")
-    public boolean login(@RequestBody User user) {
-        return userDetailsService.loadUserByUsername(user.getUsername()).getPassword().equals(user.getPassword());
+    public boolean login(@RequestBody UserDto userDto) {
+        return userDetailsService.loadUserByUsername(userDto.getUsername()).getPassword().equals(passwordEncoder.encode(userDto.getPassword()));
 //        return
 //                user.getUsername().equals("user") && user.getPassword().equals("password");
     }
@@ -46,6 +50,6 @@ public class UserController {
 
     @PostMapping("api/user")
     public void register(@RequestBody UserDto userDto) {
-        userService.insert(new User(userDto.getUsername(), userDto.getPassword(), List.of(new Role("User"))));
+        userService.insert(new User(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()), Role.USER));
     }
 }
