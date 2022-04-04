@@ -3,6 +3,7 @@ package ru.otus.springSemesterBackend.domain.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.otus.springSemesterBackend.tasks.TaskInfo;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,6 +20,11 @@ public class User {
         this.password = password;
         this.roles = roles;
     }
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "id")
+    private TaskInfo taskInfo;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
