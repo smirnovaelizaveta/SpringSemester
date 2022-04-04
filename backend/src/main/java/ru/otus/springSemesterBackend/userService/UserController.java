@@ -29,14 +29,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("api/login")
     public boolean login(@RequestBody User user) {
         return userDetailsService.loadUserByUsername(user.getUsername()).getPassword().equals(user.getPassword());
 //        return
 //                user.getUsername().equals("user") && user.getPassword().equals("password");
     }
 
-    @RequestMapping("/user")
+    @RequestMapping("api/user")
     public Principal user(HttpServletRequest request) {
         String authToken = request.getHeader("Authorization")
                 .substring("Basic".length()).trim();
@@ -44,7 +44,7 @@ public class UserController {
                 .decode(authToken)).split(":")[0];
     }
 
-    @PostMapping("/user")
+    @PostMapping("api/user")
     public void register(@RequestBody UserDto userDto) {
         userService.insert(new User(userDto.getUsername(), userDto.getPassword(), List.of(new Role("User"))));
     }
