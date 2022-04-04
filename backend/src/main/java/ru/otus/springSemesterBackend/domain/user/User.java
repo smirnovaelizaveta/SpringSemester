@@ -21,11 +21,6 @@ public class User {
         this.roles = roles;
     }
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "id")
-    private TaskInfo taskInfo;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
