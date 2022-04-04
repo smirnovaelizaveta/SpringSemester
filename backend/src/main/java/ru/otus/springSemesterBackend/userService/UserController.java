@@ -35,7 +35,8 @@ public class UserController {
 
     @PostMapping("api/login")
     public boolean login(@RequestBody UserDto userDto) {
-        return userDetailsService.loadUserByUsername(userDto.getUsername()).getPassword().equals(passwordEncoder.encode(userDto.getPassword()));
+        return passwordEncoder.matches(userDto.getPassword(), userDetailsService.loadUserByUsername(userDto.getUsername()).getPassword());
+//        return userDetailsService.loadUserByUsername(userDto.getUsername()).getPassword().equals(passwordEncoder.encode(userDto.getPassword()));
 //        return
 //                user.getUsername().equals("user") && user.getPassword().equals("password");
     }

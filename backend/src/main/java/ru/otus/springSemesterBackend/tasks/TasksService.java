@@ -36,8 +36,13 @@ public class TasksService {
     private TaskInfoRepository taskInfoRepository;
 
     @RequestMapping(path = "api/task", method = RequestMethod.GET)
-    public List<TaskInfo> getAllTasks() throws IOException {
-        return taskInfoRepository.findAll();
+    public List<TaskDto> getAllTasks(Principal principal) throws IOException {
+        return taskRepository.findAll().stream()
+                .map(task -> {
+            UserSolutionStatus userSolutionStatus = userSolutionStatusRepository.findByTaskAndUser(task, userRepository.findByUsername(principal.getName()));
+                    return (new TaskDto(task.getTaskInfo().getName(), task.getTaskInfo().getDescription(), task.getTaskInfo().getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()));
+
+                            }).collect(Collectors.toList());
     }
 
     @RequestMapping(path = "api/task/{taskId}", method = RequestMethod.GET)
