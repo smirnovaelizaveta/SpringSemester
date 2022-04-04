@@ -16,10 +16,10 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse && error.status) {
           switch (error.status) {
             case 401:      //login
-              this.router.navigate(["/sign-in"]);
+              this.router.navigate(["/login"]);
               break;
             case 403:     //forbidden
-              this.router.navigate(["/sign-in"]);
+              this.router.navigate(["/login"]);
               break;
           }
         }

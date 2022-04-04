@@ -3,10 +3,6 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-interface User {
-
-}
-
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +13,36 @@ export class UserService {
     private http: HttpClient
   ) { }
 
-  getCurrentUser(): Observable<User> {
-    return this.http.get("user");
+  getCurrentUser(): Observable<any> {
+    return this.http.get("api/user");
   }
 
-  login(login: string, password: string): Observable<any> {
-    return this.http.post("login", {username: login, password: password});
+  login(username: string, password: string): Observable<any> {
+    return this.http.post("api/login", {username: username, password: password})
+      .pipe(
+         tap( isValid => {
+           if(isValid) {
+              sessionStorage.setItem('token', btoa(username + ':' + password));
+              sessionStorage.setItem('username', username);
+           }
+         })
+      );
   }
 
-  logout(): Observable<any> {
-    return this.http.post("sample url", null);
+  register(username: string, password: string): Observable<any> {
+    return this.http.post("api/user", {username: username, password: password})
+      .pipe(
+         tap(() => this.saveCredentials(username, password))
+      );
+  }
 
+  logout() {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('username');
+  }
+
+  saveCredentials(username: string, password: string) {
+    sessionStorage.setItem('token', btoa(username + ':' + password));
+    sessionStorage.setItem('username', username);
   }
 }

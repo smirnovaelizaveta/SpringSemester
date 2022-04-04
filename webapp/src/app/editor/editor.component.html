@@ -17,7 +17,7 @@
   </mat-drawer>
   
   <div class="container" fxLayout="column" fxFill>
-    <mat-card *ngIf="selectedTask">
+    <mat-card class="task" *ngIf="selectedTask">
       <mat-card-title>{{selectedTask.name}}</mat-card-title>
       <mat-card-content>
           <p>

@@ -22,6 +22,7 @@ import { EditorComponent } from './editor/editor.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 
 
@@ -30,7 +31,8 @@ import { LoginComponent } from './login/login.component';
     AppComponent,
     TasksComponent,
     EditorComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
