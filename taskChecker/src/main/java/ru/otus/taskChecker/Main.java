@@ -44,21 +44,32 @@ import com.github.dockerjava.transport.DockerHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.kafka.annotation.EnableKafka;
-import ru.otus.taskChecker.taskChecker.TaskChecker;
+import org.springframework.util.ResourceUtils;
+import ru.otus.taskChecker.model.CheckResult;
+import ru.otus.taskChecker.service.DefaultZipExtractor;
+import ru.otus.taskChecker.service.MavenInvokeService;
+import ru.otus.taskChecker.service.SolutionProcessorFacade;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-@EnableKafka
-@SpringBootApplication
+//@EnableKafka
+//@SpringBootApplication
 public class Main {
-    public static void main(String[] args) {
-        String dockerfile = "resources/ComponentAnnotation/Dockerfile";
+    public static void main(String[] args) throws IOException {
+
+        byte[] zip = new ClassPathResource("tasks/task1.zip").getInputStream().readAllBytes();
+
+        File projectRoot = new DefaultZipExtractor().extract(zip);
+        new MavenInvokeService().build(projectRoot);
+
         DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
@@ -81,11 +92,11 @@ public class Main {
             System.out.println("BUNS "+response.getBody());
         }
 
-        Object response = dockerClient.buildImageCmd(new File(dockerfile))
+        Object response = dockerClient.buildImageCmd(projectRoot)
                 .withTags(Set.of("buns:0.0.1"))
                 .start().awaitImageId();
 
-        dockerClient.logContainerCmd("").exec(new Ob);
+//        dockerClient.logContainerCmd("").exec(new Ob);
 
         System.out.println("BUNSBUNS"+response);
     }

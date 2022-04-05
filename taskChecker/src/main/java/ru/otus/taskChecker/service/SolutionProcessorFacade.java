@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.taskChecker.model.CheckResult;
 
 import java.io.File;
+import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
