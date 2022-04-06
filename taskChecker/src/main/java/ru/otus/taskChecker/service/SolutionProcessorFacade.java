@@ -20,7 +20,7 @@ public class SolutionProcessorFacade implements SolutionProcessor {
     @Override
     public CheckResult check(byte[] solutionZip) {
         File projectRoot = zipExtractor.extract(solutionZip);
-        mavenService.build(projectRoot);
+//        mavenService.build(projectRoot);
         String log = dockerService.runAndGetLog(projectRoot);
         return logChecker.checkLog(log);
     }

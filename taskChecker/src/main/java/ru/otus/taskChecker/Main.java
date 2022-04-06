@@ -48,6 +48,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.util.ResourceUtils;
 import ru.otus.taskChecker.model.CheckResult;
+import ru.otus.taskChecker.service.DefaultDockerService;
 import ru.otus.taskChecker.service.DefaultZipExtractor;
 import ru.otus.taskChecker.service.MavenInvokeService;
 import ru.otus.taskChecker.service.SolutionProcessorFacade;
@@ -68,36 +69,8 @@ public class Main {
         byte[] zip = new ClassPathResource("tasks/task1.zip").getInputStream().readAllBytes();
 
         File projectRoot = new DefaultZipExtractor().extract(zip);
-        new MavenInvokeService().build(projectRoot);
 
-        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
-
-        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
-                .dockerHost(config.getDockerHost())
-                .sslConfig(config.getSSLConfig())
-                .maxConnections(100)
-                .connectionTimeout(Duration.ofSeconds(30))
-                .responseTimeout(Duration.ofSeconds(45))
-                .build();
-
-        DockerHttpClient.Request request = DockerHttpClient.Request.builder()
-                .method(DockerHttpClient.Request.Method.GET)
-                .path("/_ping")
-                .build();
-
-        DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
-
-        try (DockerHttpClient.Response response = httpClient.execute(request)) {
-            System.out.println("BUNS "+response.getStatusCode());
-            System.out.println("BUNS "+response.getBody());
-        }
-
-        Object response = dockerClient.buildImageCmd(projectRoot)
-                .withTags(Set.of("buns:0.0.1"))
-                .start().awaitImageId();
-
-//        dockerClient.logContainerCmd("").exec(new Ob);
-
-        System.out.println("BUNSBUNS"+response);
+        String logs = new DefaultDockerService().runAndGetLog(projectRoot);
+        System.out.println("logs = " + logs);
     }
 }
