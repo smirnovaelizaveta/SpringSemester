@@ -23,7 +23,6 @@ export class RegisterComponent implements OnInit {
   error: string | undefined;
 
   submit() {
-    console.log(this.username,this.password,this.confirmPassword);
     if(this.password === this.confirmPassword) {
       this.error = undefined;
       this.userService.register(this.username, this.password)

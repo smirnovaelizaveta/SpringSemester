@@ -1,0 +1,7 @@
+<mat-nav-list>
+  <a mat-list-item [ngClass]="{'selected-task': task.id === selectedTaskId}" [routerLink]="['/tasks', task.id]" *ngFor="let task of tasks | async">
+    {{ task.name }}
+    <mat-icon *ngIf="task.status === Status.SOLVED">check</mat-icon>                        
+    <mat-icon *ngIf="task.status === Status.IN_PROGRESS">create</mat-icon>             
+  </a>
+</mat-nav-list>

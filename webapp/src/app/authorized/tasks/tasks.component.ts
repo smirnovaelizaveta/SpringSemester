@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TasksService } from '../service/tasks.service';
 import { Status, Task } from '../model/task';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -11,18 +12,13 @@ export class TasksComponent implements OnInit {
   constructor(private tasksService: TasksService) { }
 
   public Status: any = Status;
-  tasks?: Task[];
+  tasks?: Observable<Task[]>;
   name: string = "";
   description: string = "";
   difficultyLevel: number = 1;
 
   ngOnInit(): void {
-    this.getTasks()
-  }
-
-  getTasks(): void {
-    this.tasksService.getTasks()
-    .subscribe(tasks => this.tasks = tasks);
+    this.tasks = this.tasksService.getTasks();
   }
 
   upload(event: any) {
@@ -39,9 +35,7 @@ export class TasksComponent implements OnInit {
           console.log("name", this.name);
           console.log("description", this.description);
           console.log("difficultylevel", ""+this.difficultyLevel);
-          this.tasksService.uploadTask(formData).subscribe(
-            () => this.getTasks()
-          );
+          this.tasksService.uploadTask(formData).subscribe();
       }
   }
 }

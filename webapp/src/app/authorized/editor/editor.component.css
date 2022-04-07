@@ -1,11 +1,3 @@
-html, body {
-  max-height: 100%;
-}
-
-mat-drawer {
-	width:  20%;
-}
-
 .container {
 	height: 100%;
 }
@@ -14,13 +6,14 @@ mat-card {
 	margin:  5px;
 }
 
+.selected-task {
+  font-weight: bold;
+}
+
 .file-input {
   display: none;
 }
 
-.selected-task {
-  font-weight: bold;
-}
 
 /*Tree styles*/
 .tree-container {
@@ -80,6 +73,7 @@ height:100%;
 .selected-file {
   font-weight: bold;
 }
+
 
 .code-container {
 	overflow-y: scroll;

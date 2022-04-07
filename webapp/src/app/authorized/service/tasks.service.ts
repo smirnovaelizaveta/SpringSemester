@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-// import { ResponseContentType } from '@angular/http';
-
-import { Observable, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, BehaviorSubject} from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-
 import { Task, Status } from '../model/task';
 import { Project } from '../model/project';
 import { MOCK_PROJECT } from '../mock/project';
-// import { MessageService } from './message.service';
 
 
 interface TaskDto {
@@ -20,20 +17,21 @@ interface TaskDto {
 
 @Injectable({ providedIn: 'root' })
 export class TasksService {
-
-  private taskUrl = 'api/task/'; 
-
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
-
   constructor(
     private http: HttpClient,
-  ) { }
+    private route: ActivatedRoute
+  ) {
+    this.tasks = new BehaviorSubject<Task[]>(new Array<Task>());
 
-  /** GET heroes from the server */
-  getTasks(): Observable<Task[]> {
-    return this.http.get<TaskDto[]>(this.taskUrl)
+    this.loadTasks();
+  }
+
+  taskUrl: string = 'api/task/'; 
+
+  private tasks: BehaviorSubject<Task[]>;
+
+  loadTasks() {
+    this.http.get<TaskDto[]>(this.taskUrl)
       .pipe(
         map((taskDtos) => taskDtos.map((dto) => Object(
           {
@@ -42,8 +40,15 @@ export class TasksService {
             description: dto.description,
             difficultyLevel: dto.difficultylevel,
             project: MOCK_PROJECT
-          }) as Task))
-      );
+          }) as Task)),
+      )
+      .subscribe(
+        tasks => this.tasks.next(tasks)
+      )
+  }
+
+  getTasks(): Observable<Task[]> {
+    return this.tasks.asObservable();
   }
 
   downloadCode(taskId: number): Observable<any> {
@@ -63,19 +68,8 @@ export class TasksService {
 
   uploadTask(formData: FormData): Observable<any> {
     return this.http.post(this.taskUrl, formData)
-  }
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   *
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      console.error(error);
-      return of(result as T);
-    };
+    .pipe(
+      tap(() => this.loadTasks())
+    )
   }
 }
