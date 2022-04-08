@@ -3,8 +3,8 @@ package ru.otus.springSemesterBackend.userService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.otus.springSemesterBackend.domain.user.Role;
-import ru.otus.springSemesterBackend.domain.user.User;
+import ru.otus.springSemesterBackend.model.user.Role;
+import ru.otus.springSemesterBackend.model.user.User;
 
 
 import java.util.ArrayList;

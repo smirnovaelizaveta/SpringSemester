@@ -1,11 +1,13 @@
 package ru.otus.taskChecker.service;
 
 import org.apache.maven.shared.invoker.*;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+@Service
 public class MavenInvokeService implements MavenService {
     @Override
     public void build(File projectRoot) {

@@ -1,7 +1,7 @@
 package ru.otus.taskChecker.service;
 
-import ru.otus.taskChecker.model.CheckResult;
+import ru.otus.taskChecker.model.SolutionCheck;
 
 public interface SolutionProcessor {
-    CheckResult check(byte[] solutionZip);
+    SolutionCheck check(byte[] solutionZip);
 }

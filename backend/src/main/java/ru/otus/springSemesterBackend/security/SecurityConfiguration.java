@@ -22,25 +22,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
         this.userDetailsService = userDetailsService;
     }
 
-
-//    @Override
-//    protected void configure(final HttpSecurity http)
-//            throws Exception {
-//
-//        http
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/css/**").permitAll() //Adding this line solved it
-//                .antMatchers("/login").permitAll()
-////                .antMatchers("/login").anonymous()
-////                .antMatchers("/api/**").anonymous()
-//                .antMatchers(HttpMethod.DELETE, "/api/books/*").hasAuthority("ADMIN")
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//        ;
-//    }
-
     @Override
     protected void configure(HttpSecurity http)
             throws Exception {
@@ -48,18 +29,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
                 .authorizeRequests()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user").permitAll()
-                .antMatchers("/api/**")    .permitAll()
+//                .antMatchers("/api/**")    .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .httpBasic();
     }
-
-    @SuppressWarnings("deprecation")
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
 
     @Bean
     public PasswordEncoder encoder() {

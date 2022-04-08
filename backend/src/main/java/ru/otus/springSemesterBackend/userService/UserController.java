@@ -1,21 +1,15 @@
 package ru.otus.springSemesterBackend.userService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.springSemesterBackend.domain.user.Role;
-import ru.otus.springSemesterBackend.domain.user.User;
-import ru.otus.springSemesterBackend.domain.user.UserDto;
+import ru.otus.springSemesterBackend.model.user.User;
+import ru.otus.springSemesterBackend.controller.dto.UserDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -51,6 +45,6 @@ public class UserController {
 
     @PostMapping("api/user")
     public void register(@RequestBody UserDto userDto) {
-        userService.insert(new User(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()), Role.USER));
+        userService.insert(new User(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword())));
     }
 }

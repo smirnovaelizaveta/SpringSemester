@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import ru.otus.springSemesterBackend.domain.user.User;
+import ru.otus.springSemesterBackend.model.task.Task;
+import ru.otus.springSemesterBackend.model.user.User;
 
 import javax.persistence.*;
 

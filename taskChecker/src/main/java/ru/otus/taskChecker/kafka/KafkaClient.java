@@ -10,7 +10,7 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import ru.otus.taskChecker.model.CheckResult;
+import ru.otus.taskChecker.model.SolutionCheck;
 import ru.otus.taskChecker.service.SolutionProcessor;
 
 
@@ -19,14 +19,15 @@ import ru.otus.taskChecker.service.SolutionProcessor;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class KafkaClient {
     private final SolutionProcessor solutionProcessor;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<Long, String> kafkaTemplate;
 
-    private static final String IN_TOPIC= "file";
-    private static final String OUT_TOPIC = "file";
+    private static final String IN_TOPIC= "solution";
+    private static final String OUT_TOPIC = "solutionCheck";
 
     @KafkaListener(topics = IN_TOPIC, groupId = "group_id")
-    public void process(@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key, @Payload byte[] solutionZip) {
-        CheckResult result = solutionProcessor.check(solutionZip);
+    public void process(@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) Long key, @Payload byte[] solutionZip) {
+        System.out.println("RECEIVED_MESSAGE_KEY is "+key);
+        SolutionCheck result = solutionProcessor.check(solutionZip);
         String message = new Gson().toJson(result);
         kafkaTemplate.send(OUT_TOPIC, key, message);
 

@@ -39,12 +39,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.EnableKafka;
-import ru.otus.springSemesterBackend.domain.user.Role;
-import ru.otus.springSemesterBackend.domain.user.User;
 import ru.otus.springSemesterBackend.userService.UserService;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 
 @Slf4j
 @EnableKafka

@@ -1,6 +1,6 @@
 package ru.otus.springSemesterBackend.userService;
 
-import ru.otus.springSemesterBackend.domain.user.User;
+import ru.otus.springSemesterBackend.model.user.User;
 
 public interface UserService {
 

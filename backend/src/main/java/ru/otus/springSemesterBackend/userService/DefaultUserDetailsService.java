@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.otus.springSemesterBackend.domain.user.User;
+import ru.otus.springSemesterBackend.model.user.User;
 
 @Service
 public class DefaultUserDetailsService

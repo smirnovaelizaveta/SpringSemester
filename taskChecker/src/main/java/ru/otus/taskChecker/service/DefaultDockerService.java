@@ -13,6 +13,7 @@ import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class DefaultDockerService implements DockerService {
     @Override
     public String runAndGetLog(File projectRoot) {
@@ -86,7 +88,10 @@ public class DefaultDockerService implements DockerService {
         }
 
 //        System.out.println("BUNSBUNS"+response);
+
+        dockerClient.removeContainerCmd(container.getId()).exec();
         return logs.stream()
+                .map(line -> line.replaceAll("STDOUT: |STDERR: ", ""))
                 .collect(Collectors.joining("\n"));
 
     }
