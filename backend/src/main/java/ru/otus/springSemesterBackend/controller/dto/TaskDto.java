@@ -9,6 +9,7 @@ import ru.otus.springSemesterBackend.tasks.UserSolutionStatus;
 @AllArgsConstructor
 public class TaskDto {
 
+    private Long id;
     private String name;
     private String description;
     private Integer difficultylevel;

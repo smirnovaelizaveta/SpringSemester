@@ -35,7 +35,7 @@ public class TaskController {
         return taskRepository.findAll().stream()
                 .map(task -> {
             UserSolutionStatus userSolutionStatus = userSolutionStatusRepository.findByTaskAndUser(task, userRepository.findByUsername(principal.getName()));
-                    return (new TaskDto(task.getName(), task.getDescription(), task.getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()));
+                    return (new TaskDto(task.getId(), task.getName(), task.getDescription(), task.getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()));
 
                             }).collect(Collectors.toList());
     }
@@ -48,7 +48,7 @@ public class TaskController {
                 taskRepository.findById(taskId)
                         .map(task -> {
                             UserSolutionStatus userSolutionStatus = userSolutionStatusRepository.findByTaskAndUser(task, userRepository.findByUsername(principal.getName()));
-                            return new ResponseEntity<>(new TaskDto(task.getName(), task.getDescription(), task.getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()), HttpStatus.OK);
+                            return new ResponseEntity<>(new TaskDto(task.getId(), task.getName(), task.getDescription(), task.getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()), HttpStatus.OK);
                         })
                         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
