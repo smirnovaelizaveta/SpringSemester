@@ -74,7 +74,28 @@ height:100%;
   font-weight: bold;
 }
 
+.selected-solution {
+  font-weight: bold;
+}
+
 
 .code-container {
 	overflow-y: scroll;
 }
+
+.stack-trace {
+  font-family: monospace;
+  white-space: pre;
+}
+
+.solution-correct {
+  background-color: #e0ffe0;
+  color: darkgreen;
+}
+
+.solution-wrong {
+  background-color: #ffe0e0;
+  color: brown;
+}
+
+

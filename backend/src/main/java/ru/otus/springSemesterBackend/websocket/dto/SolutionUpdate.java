@@ -8,5 +8,6 @@ import ru.otus.springSemesterBackend.model.attempt.Attempt;
 @AllArgsConstructor
 public class SolutionUpdate {
     Long taskId;
-    Attempt solution;
+    Boolean correct;
+    String stackTrace;
 }

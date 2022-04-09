@@ -30,11 +30,6 @@ export class TasksComponent implements OnInit {
           formData.append("name", this.name);
           formData.append("description", this.description);
           formData.append("difficultylevel", ""+this.difficultyLevel);
-          console.log(formData);
-          console.log("file", file);
-          console.log("name", this.name);
-          console.log("description", this.description);
-          console.log("difficultylevel", ""+this.difficultyLevel);
           this.tasksService.uploadTask(formData).subscribe();
       }
   }

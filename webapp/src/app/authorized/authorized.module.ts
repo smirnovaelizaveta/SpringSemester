@@ -20,6 +20,7 @@ import { MenuComponent } from './menu/menu.component';
 import { AuthorizedRoutingModule } from './authorized-routing.module';
 import { AuthorizedComponent } from './authorized.component';
 import { TasksService } from './service/tasks.service';
+ import { MatTabsModule } from '@angular/material/tabs'; 
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { TasksService } from './service/tasks.service';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    CodemirrorModule
+    CodemirrorModule,
+    MatTabsModule
   ]
 })
 export class AuthorizedModule { }

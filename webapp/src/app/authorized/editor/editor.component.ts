@@ -1,10 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { TasksService } from '../service/tasks.service';
+import { SolutionService } from '../service/solution.service';
 import { Status, Task } from '../model/task';
+import { Solution } from '../model/solution'
 import { Project, ProjectFile } from '../model/project';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { zip, Observable, of } from 'rxjs';
 import { map, tap, flatMap } from 'rxjs/operators';
 
@@ -28,21 +30,24 @@ export class EditorComponent implements OnInit {
 
   constructor(
     private tasksService: TasksService,
-    private route: ActivatedRoute
+    private solutionService: SolutionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.tasks = this.tasksService.getTasks();
-    this.tasks.subscribe(
-      tasks => this.route.params .subscribe(params  => {
+    this.tasks.subscribe(tasks => {
+      if(tasks.length > 0) {
+        this.route.params.subscribe(params  => {
           const taskId: number = +params['taskId'];
-          console.log(tasks, taskId)
           this.selectedTask = tasks.find((task: Task) => task.id === taskId);
-          if(this.selectedTask) {
-            this.tasksService.getProjectTree(this.selectedTask.id)
-            .subscribe(
-              project => {
-                console.log(this.tasks, this.selectedTask);
+          if(!this.selectedTask) {
+            window.alert(`Task with id ${taskId} does not exist.`)
+            this.router.navigate(['/tasks'])
+          } else {
+            this.tasksService.getProjectTree(this.selectedTask!.id)
+            .subscribe(project => {
                 if(project) {
                   const data = project.files;
                   this.dataSource.data = data;
@@ -51,9 +56,10 @@ export class EditorComponent implements OnInit {
                 }
               }
             ) 
+          }
+        })
        }
-      })
-    )
+    })
   }      
   
 
@@ -85,19 +91,9 @@ export class EditorComponent implements OnInit {
 
     if (file) {
       const formData = new FormData();
+      formData.append("taskId", `${this.selectedTask!.id}`)
       formData.append("file", file);
       this.tasksService.uploadCode(formData).subscribe();
     }
-  }
-
-  getSelectedTask(): Observable<any> {
-    return zip(this.tasksService.getTasks(), this.route.params)
-      .pipe(
-        map(([tasks, params]) => {
-          console.log(tasks, params);
-          const taskId: number = +params['taskId'];
-          return tasks?.find(task => task.id === taskId);
-        })
-      )
   }
 }

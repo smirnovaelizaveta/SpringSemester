@@ -30,7 +30,12 @@
               "src/custom-theme.scss",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "codemirror",
+              "sockjs-client",
+              "stompjs"
+             ]
           },
           "configurations": {
             "production": {

@@ -26,8 +26,9 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="editor" *ngIf="selectedTask">
-      <mat-card-content>
+    <div *ngIf="selectedTask">
+      <mat-card class="editor">
+        <mat-card-content>
           <div fxLayout=”row” >
             <div class="tree-container" fxFlex="25">
               <mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
@@ -66,17 +67,47 @@
                   [options]="{
                     lineNumbers: true,
                     mode: 'clike'
-                  }"
-                ></ngx-codemirror>
+                  }">
+                </ngx-codemirror>
             </div>
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
-          <button mat-button (click)="download()">DOWNLOAD PROJECT</button>
-          <button mat-button (click)="fileUpload.click()">UPLOAD PROJECT</button>
-          <!-- <span *ngIf="uploadFile">File: {{uploadFile}}</span> -->
-          <input type="file" class="file-input" (change)="upload($event)" #fileUpload>
-      </mat-card-actions>
-    </mat-card>
+          </div>
+          
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="download()">DOWNLOAD PROJECT</button>
+            <button mat-button (click)="fileUpload.click()">UPLOAD PROJECT</button>
+            <!-- <span *ngIf="uploadFile">File: {{uploadFile}}</span> -->
+            <input type="file" class="file-input" (change)="upload($event)" #fileUpload>
+        </mat-card-actions>
+      </mat-card>
+
+      <div *ngIf="selectedTask.solution as solution">
+        <mat-card *ngIf="solution.correct" class="solution-correct">
+          <mat-card-title >
+            <mat-icon>check_circle</mat-icon>
+            Your solution is correct!
+          </mat-card-title>
+        </mat-card>
+        <mat-card *ngIf="solution.correct === false" class="solution-wrong">
+          <mat-card-title>
+            <mat-icon>cancel</mat-icon>
+            There are test failures.
+          </mat-card-title>
+          <mat-card-content>
+            <p class="stack-trace" *ngIf = solution.stackTrace>
+              {{solution.stackTrace}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card *ngIf="solution.correct == null">
+          <mat-card-title>
+            Your solution is being processed. Please wait.
+          </mat-card-title>
+          <mat-card-actions>
+            <button mat-button>REFRESH</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
   </div>
 </mat-drawer-container>

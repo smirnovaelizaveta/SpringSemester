@@ -26,7 +26,7 @@ export class MenuComponent implements OnInit {
     this.tasks = this.tasksService.getTasks();
 
     this.route.params
-      .subscribe(params => {this.selectedTaskId = +params['taskId']; console.log(params)});
+      .subscribe(params => this.selectedTaskId = +params['taskId']);
   }
 
 }

@@ -1,4 +1,5 @@
 import { Project } from './project';
+import { Solution } from './solution';
 
 export interface Task {
   id: number;
@@ -6,6 +7,7 @@ export interface Task {
   description: string;
   status: Status;
   difficultyLevel: number;
+  solution?: Solution
 }
 
 export enum Status {

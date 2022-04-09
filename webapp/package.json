@@ -22,12 +22,16 @@
     "@angular/platform-browser-dynamic": "~13.2.0",
     "@angular/router": "~13.2.0",
     "@ctrl/ngx-codemirror": "^5.1.1",
+    "@stomp/rx-stomp": "^1.1.4",
     "codemirror": "^5.65.2",
     "file-saver": "^2.0.5",
     "ngx-highlightjs": "^6.1.2",
     "rxjs": "~7.5.0",
+    "sockjs-client": "^1.3.0",
+    "stompjs": "^2.3.3",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "net": "^1.0.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.2.6",
@@ -35,6 +39,8 @@
     "@angular/compiler-cli": "~13.2.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "@types/sockjs-client": "^1.5.1",
+    "@types/stompjs": "^2.3.5",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

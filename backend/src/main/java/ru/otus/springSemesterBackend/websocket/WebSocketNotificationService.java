@@ -11,17 +11,18 @@ import ru.otus.springSemesterBackend.websocket.dto.SolutionUpdate;
 
 @Service
 public class WebSocketNotificationService implements NotificationService {
+    private static final String destination = "/topic/solution";
+
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-
     @Override
     public void notify(Attempt attempt) {
-        this.send(new SolutionUpdate(attempt.getUserSolutionStatus().getTask().getId(), attempt));
+        this.send(new SolutionUpdate(attempt.getUserSolutionStatus().getTask().getId(), attempt.isCorrect(), attempt.getStackTrace()));
     }
 
     public void send(SolutionUpdate solutionUpdate) {
         System.out.println("sending " + solutionUpdate );
-        this.simpMessagingTemplate.convertAndSend("/topic/greetings", solutionUpdate.getSolution().getStackTrace());
+        this.simpMessagingTemplate.convertAndSend(destination, solutionUpdate);
     }
 }

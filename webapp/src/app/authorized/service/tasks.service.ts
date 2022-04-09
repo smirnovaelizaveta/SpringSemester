@@ -4,8 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, BehaviorSubject} from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Task, Status } from '../model/task';
+import { Solution } from '../model/solution';
 import { Project } from '../model/project';
 import { MOCK_PROJECT } from '../mock/project';
+import { MOCK_SOLUTION } from '../mock/solution';
+import { SolutionService } from './solution.service'
 
 
 interface TaskDto {
@@ -19,16 +22,15 @@ interface TaskDto {
 export class TasksService {
   constructor(
     private http: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private solutionService: SolutionService
   ) {
-    this.tasks = new BehaviorSubject<Task[]>(new Array<Task>());
-
     this.loadTasks();
   }
 
   taskUrl: string = 'api/task/'; 
 
-  private tasks: BehaviorSubject<Task[]>;
+  private tasks = new BehaviorSubject<Task[]>([]);
 
   loadTasks() {
     this.http.get<TaskDto[]>(this.taskUrl)
@@ -39,12 +41,24 @@ export class TasksService {
             name: dto.name,
             description: dto.description,
             difficultyLevel: dto.difficultylevel,
-            project: MOCK_PROJECT
+            project: MOCK_PROJECT,
+            solution: MOCK_SOLUTION
           }) as Task)),
       )
       .subscribe(
         tasks => this.tasks.next(tasks)
       )
+
+    this.solutionService.listenSolutionUpdates().subscribe(
+       update => this.tasks.next(
+         this.tasks.getValue().map(task => {
+           if(task.id === update.taskId) {
+             task.solution = update as Solution
+           }
+           return task;
+         })
+       )
+     )
   }
 
   getTasks(): Observable<Task[]> {
