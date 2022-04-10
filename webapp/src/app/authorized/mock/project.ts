@@ -168,7 +168,7 @@ export const MOCK_PROJECT: Project = {
                       children: [
                         {
                           name: 'Main.java',
-                          contents: MOCK_CODE_JAVA,
+                          content: MOCK_CODE_JAVA,
                           readonly: false,
                         }
                       ]
@@ -207,7 +207,7 @@ export const MOCK_PROJECT: Project = {
                       children: [
                         {
                           name: 'Main.java',
-                          contents: MOCK_CODE_JAVA,
+                          content: MOCK_CODE_JAVA,
                           readonly: false,
                         }
                       ]
@@ -222,7 +222,7 @@ export const MOCK_PROJECT: Project = {
     },
     {
       name: 'pom.xml',
-      contents: MOCK_CODE_XML,
+      content: MOCK_CODE_XML,
       readonly: false
     },
   ]

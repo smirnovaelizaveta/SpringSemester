@@ -14,7 +14,7 @@ import * as SockJS from 'sockjs-client';
 export class SolutionService implements OnDestroy  {
   stompClient: any;
   webSocketEndPoint: string = 'http://localhost:7778/ws';
-  topic: string = "/topic/solution";
+  topic: string = "/user/topic/solution";
   solutionUpdate: Subject<SolutionUpdate> = new Subject();
 
   constructor() {
@@ -30,6 +30,7 @@ export class SolutionService implements OnDestroy  {
   private init() {
     const ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = null;
     const _this = this;
     _this.stompClient.connect({}, (frame: any) => {
         _this.stompClient.subscribe(_this.topic, (message: any)  => {

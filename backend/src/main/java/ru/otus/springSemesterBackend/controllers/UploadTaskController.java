@@ -1,4 +1,4 @@
-package ru.otus.springSemesterBackend.tasks;
+package ru.otus.springSemesterBackend.controllers;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

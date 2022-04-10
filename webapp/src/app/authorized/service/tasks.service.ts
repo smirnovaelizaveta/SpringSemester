@@ -72,7 +72,7 @@ export class TasksService {
   getProjectTree(taskId: number): Observable<Project> {
     return this.http.get(this.taskUrl+`${taskId}/project-tree`)
       .pipe(
-        map((result) => MOCK_PROJECT as Project)
+        map((result) => result as Project)
       );
   }
 

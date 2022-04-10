@@ -1,13 +1,11 @@
 package ru.otus.springSemesterBackend.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
 import ru.otus.springSemesterBackend.mappers.SolutionUpdateMapper;
 import ru.otus.springSemesterBackend.model.solution.Solution;
+import ru.otus.springSemesterBackend.model.user.User;
 import ru.otus.springSemesterBackend.websocket.dto.SolutionUpdate;
 
 @Service
@@ -22,11 +20,11 @@ public class WebSocketNotificationService implements NotificationService {
 
     @Override
     public void notify(Solution solution) {
-        this.send(solutionUpdateMapper.toDto(solution));
+        this.send(solutionUpdateMapper.toDto(solution), solution.getUserSolutionStatus().getUser());
     }
 
-    public void send(SolutionUpdate solutionUpdate) {
+    public void send(SolutionUpdate solutionUpdate, User user) {
         System.out.println("sending " + solutionUpdate );
-        this.simpMessagingTemplate.convertAndSend(destination, solutionUpdate);
+        this.simpMessagingTemplate.convertAndSendToUser(user.getUsername(), destination, solutionUpdate);
     }
 }

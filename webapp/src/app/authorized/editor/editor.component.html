@@ -38,7 +38,7 @@
                 <mat-tree-node class="project-item" *matTreeNodeDef="let node" matTreeNodeToggle>
                     <button mat-button class="project-item" 
                     [ngClass]="{'selected-file': node === selectedFile}" (click)="selectFile(node)">
-                      {{node.name}}
+                      {{displayName(node)}}
                     </button>
                 </mat-tree-node>
                 <!-- This is the tree node template for expandable nodes -->
@@ -49,7 +49,7 @@
                         <mat-icon class="mat-icon-rtl-mirror">
                           {{treeControl.isExpanded(node) ? 'remove' : 'add'}}
                         </mat-icon>
-                        {{node.name}}
+                        {{displayName(node)}}
                       </button>
                     </div>
                     <!-- There is inline padding applied to this div using styles.
@@ -62,8 +62,8 @@
               </mat-tree>
             </div>
             <div class="code-container" fxFlex="75">
-                <ngx-codemirror *ngIf="selectedFile && selectedFile.contents" fxFlex="100"
-                  [(ngModel)]="selectedFile.contents"
+                <ngx-codemirror *ngIf="selectedFile && selectedFile.content" fxFlex="100"
+                  [(ngModel)]="selectedFile.content"
                   [options]="{
                     lineNumbers: true,
                     mode: 'clike'

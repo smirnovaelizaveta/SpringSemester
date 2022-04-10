@@ -53,6 +53,7 @@ export class EditorComponent implements OnInit {
                   this.dataSource.data = data;
                   this.treeControl.dataNodes = data;
                   this.treeControl.expandAll();
+                  console.log(this.treeControl)
                 }
               }
             ) 
@@ -69,6 +70,7 @@ export class EditorComponent implements OnInit {
   @ViewChild('tree') tree: any;
 
   selectFile(file: ProjectFile) {
+    console.log(file);
     this.selectedFile = file;
   }
 
@@ -95,5 +97,14 @@ export class EditorComponent implements OnInit {
       formData.append("file", file);
       this.tasksService.uploadCode(formData).subscribe();
     }
+  }
+
+  displayName(projectFile: ProjectFile) {
+    let displayName: string = projectFile.name;
+    if(displayName.endsWith('/')) {
+      displayName=displayName.slice(0,-1);
+    }
+
+    return displayName.substring(displayName.lastIndexOf('/') + 1)
   }
 }

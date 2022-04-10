@@ -3,8 +3,8 @@ export interface Project {
 }
 
 export interface ProjectFile {
-  name: String;
-  contents?: String;
+  name: string;
+  content?: string;
   children?: ProjectFile[];
-  readonly: Boolean;
+  readonly: boolean;
 }
