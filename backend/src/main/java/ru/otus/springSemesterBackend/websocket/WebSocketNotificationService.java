@@ -6,7 +6,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
-import ru.otus.springSemesterBackend.model.attempt.Attempt;
+import ru.otus.springSemesterBackend.mappers.SolutionUpdateMapper;
+import ru.otus.springSemesterBackend.model.solution.Solution;
 import ru.otus.springSemesterBackend.websocket.dto.SolutionUpdate;
 
 @Service
@@ -16,9 +17,12 @@ public class WebSocketNotificationService implements NotificationService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
+    @Autowired
+    private SolutionUpdateMapper solutionUpdateMapper;
+
     @Override
-    public void notify(Attempt attempt) {
-        this.send(new SolutionUpdate(attempt.getUserSolutionStatus().getTask().getId(), attempt.isCorrect(), attempt.getStackTrace()));
+    public void notify(Solution solution) {
+        this.send(solutionUpdateMapper.toDto(solution));
     }
 
     public void send(SolutionUpdate solutionUpdate) {

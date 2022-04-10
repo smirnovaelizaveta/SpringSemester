@@ -47,6 +47,7 @@ public class KafkaClient {
         System.out.println("lol"+ solution.isCorrect());
 
         solution.setCorrect(solutionCheck.isCorrect());
+        notificationService.notify(solution);
         solutionRepository.save(solution);
 //        kafkaTemplate.send(OUT_TOPIC, key, message);
 

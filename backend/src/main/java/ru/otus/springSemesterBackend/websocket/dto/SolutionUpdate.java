@@ -2,7 +2,6 @@ package ru.otus.springSemesterBackend.websocket.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.otus.springSemesterBackend.model.attempt.Attempt;
 
 @Data
 @AllArgsConstructor
