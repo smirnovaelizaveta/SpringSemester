@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import ru.otus.springSemesterBackend.model.solution.SolutionCheck;
 import ru.otus.springSemesterBackend.model.attempt.Attempt;
 import ru.otus.springSemesterBackend.model.attempt.repository.AttemptRepository;
+import ru.otus.springSemesterBackend.websocket.NotificationService;
 
 import java.util.Optional;
 
@@ -28,24 +29,21 @@ public class KafkaClient {
     @Autowired
     private final AttemptRepository attemptRepository;
 
+    @Autowired
+    private final NotificationService notificationService;
+
     private static final String IN_TOPIC= "solutionCheck";
     private static final String OUT_TOPIC = "solution";
 
     @KafkaListener(topics = IN_TOPIC, groupId = "group_id")
     public void process(@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) Long key, @Payload String solutionCheckJson) {
-        System.out.println("RECEIVED_MESSAGE_KEY is "+key);
-        System.out.println("Body is "+solutionCheckJson);
         SolutionCheck solutionCheck = new Gson().fromJson(solutionCheckJson, SolutionCheck.class);
-//        CheckResult result = solutionProcessor.check(solutionZip);
-//        String message = new Gson().toJson(result);
-        Optional<Attempt> attemptOptional = attemptRepository.findById(key);
-        Attempt attempt = attemptOptional.get();
-        System.out.println("lol"+attempt.isCorrect());
-
+        Attempt attempt = attemptRepository.findById(key).orElseThrow();
         attempt.setCorrect(solutionCheck.isCorrect());
-//        kafkaTemplate.send(OUT_TOPIC, key, message);
-
+        notificationService.notify(attempt);
+        attemptRepository.save(attempt);
     }
+
     public void send(Long key, byte[] solutionZip) {
         kafkaTemplate.send(OUT_TOPIC, key, solutionZip);
     }
