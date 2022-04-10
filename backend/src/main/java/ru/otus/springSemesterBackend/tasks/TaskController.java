@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.springSemesterBackend.controller.dto.TaskDto;
-import ru.otus.springSemesterBackend.model.task.repository.TaskRepository;
-import ru.otus.springSemesterBackend.userService.UserRepository;
+import ru.otus.springSemesterBackend.controllers.dto.TaskDto;
+import ru.otus.springSemesterBackend.mappers.TaskMapper;
+import ru.otus.springSemesterBackend.model.solution.UserSolutionStatus;
+import ru.otus.springSemesterBackend.services.TaskService;
+import ru.otus.springSemesterBackend.services.UserService;
+import ru.otus.springSemesterBackend.services.UserSolutionStatusService;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,20 +24,23 @@ import java.util.stream.Collectors;
 public class TaskController {
 
     @Autowired
-    private TaskRepository taskRepository;
+    private TaskService taskService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserSolutionStatusService userSolutionStatusService;
 
     @Autowired
-    private UserSolutionStatusRepository userSolutionStatusRepository;
+    private UserService userService;
+
+    @Autowired
+    private TaskMapper taskMapper;
 
     @RequestMapping(path = "api/task", method = RequestMethod.GET)
     public List<TaskDto> getAllTasks(Principal principal){
-        return taskRepository.findAll().stream()
+        return taskService.getAllTasks().stream()
                 .map(task -> {
-            UserSolutionStatus userSolutionStatus = userSolutionStatusRepository.findByTaskAndUser(task, userRepository.findByUsername(principal.getName()));
-                    return (new TaskDto(task.getId(), task.getName(), task.getDescription(), task.getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()));
+            UserSolutionStatus userSolutionStatus = userSolutionStatusService.findByTaskAndUser(task, userService.getUser(principal.getName()));
+                    return taskMapper.toDto(task, userSolutionStatus);
 
                             }).collect(Collectors.toList());
     }
@@ -45,10 +50,10 @@ public class TaskController {
         String userName = (principal.getName()!=null) ? principal.getName() : "anonymous";
 
         return
-                taskRepository.findById(taskId)
+                taskService.getTask(taskId)
                         .map(task -> {
-                            UserSolutionStatus userSolutionStatus = userSolutionStatusRepository.findByTaskAndUser(task, userRepository.findByUsername(principal.getName()));
-                            return new ResponseEntity<>(new TaskDto(task.getId(), task.getName(), task.getDescription(), task.getDifficultylevel(), (userSolutionStatus == null) ? UserSolutionStatus.SolutionStatus.NOT_STARTED : userSolutionStatus.getSolutionStatus()), HttpStatus.OK);
+                            UserSolutionStatus userSolutionStatus = userSolutionStatusService.findByTaskAndUser(task, userService.getUser(principal.getName()));
+                            return new ResponseEntity<>(taskMapper.toDto(task, userSolutionStatus), HttpStatus.OK);
                         })
                         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 

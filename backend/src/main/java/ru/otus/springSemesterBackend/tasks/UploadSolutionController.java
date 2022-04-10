@@ -1,38 +1,45 @@
 package ru.otus.springSemesterBackend.tasks;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.otus.springSemesterBackend.controllers.dto.SolutionDto;
 import ru.otus.springSemesterBackend.kafka.KafkaClient;
-import ru.otus.springSemesterBackend.model.attempt.Attempt;
-import ru.otus.springSemesterBackend.model.attempt.repository.AttemptRepository;
+import ru.otus.springSemesterBackend.mappers.SolutionMapper;
+import ru.otus.springSemesterBackend.model.solution.Solution;
+import ru.otus.springSemesterBackend.model.solution.repository.SolutionRepository;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @RestController
 public class UploadSolutionController {
 
     @Autowired
-    private AttemptRepository attemptRepository;
+    private SolutionMapper solutionMapper;
+
+    @Autowired
+    private SolutionRepository solutionRepository;
 
     @Autowired
     private KafkaClient kafkaClient;
 
 
-    @PostMapping("api/solution")
-    public void uploadFile(@RequestParam("file") MultipartFile file) {
-        byte[] solution = new byte[0];
+    @PostMapping("api/task/{taskId}/solution")
+    public void uploadFile(@PathVariable(name = "taskId") Long taskId, @RequestParam("file") MultipartFile file) {
+
+        byte[] solutionCode = new byte[0];
         try {
-            solution = file.getBytes();
+            solutionCode = file.getBytes();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Attempt attempt = new Attempt();
-        attempt.setSolutionCode(solution);
-        attemptRepository.save(attempt);
-        kafkaClient.send(attempt.getId(), solution);
+        Solution solution = new Solution();
+        solution.setSolutionCode(solutionCode);
+        solutionRepository.save(solution);
+        kafkaClient.send(solution.getId(), solutionCode);
 //            String text = new String(file.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 //            kafkaTemplate.send("file", "bun", file.getBytes());
     }

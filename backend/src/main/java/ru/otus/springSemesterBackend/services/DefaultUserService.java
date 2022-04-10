@@ -1,7 +1,8 @@
-package ru.otus.springSemesterBackend.userService;
+package ru.otus.springSemesterBackend.services;
 
 import org.springframework.stereotype.Service;
 import ru.otus.springSemesterBackend.model.user.User;
+import ru.otus.springSemesterBackend.model.user.repository.UserRepository;
 
 @Service
 public class DefaultUserService implements UserService {
@@ -10,6 +11,11 @@ public class DefaultUserService implements UserService {
 
     public DefaultUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public User getUser(String userName) {
+        return userRepository.findByUsername(userName);
     }
 
     @Override

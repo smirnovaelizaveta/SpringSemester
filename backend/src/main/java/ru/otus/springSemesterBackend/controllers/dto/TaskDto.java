@@ -1,9 +1,9 @@
-package ru.otus.springSemesterBackend.controller.dto;
+package ru.otus.springSemesterBackend.controllers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.otus.springSemesterBackend.tasks.UserSolutionStatus;
+import ru.otus.springSemesterBackend.model.solution.Solution;
+import ru.otus.springSemesterBackend.model.solution.UserSolutionStatus;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +14,5 @@ public class TaskDto {
     private String description;
     private Integer difficultylevel;
     private UserSolutionStatus.SolutionStatus solutionStatus;
+    private Solution solution;
 }

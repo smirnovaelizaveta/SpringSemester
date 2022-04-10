@@ -38,8 +38,10 @@ package ru.otus.springSemesterBackend;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.EnableKafka;
-import ru.otus.springSemesterBackend.userService.UserService;
+import ru.otus.springSemesterBackend.mappers.TaskMapper;
+import ru.otus.springSemesterBackend.services.UserService;
 
 import javax.annotation.PostConstruct;
 
@@ -49,7 +51,6 @@ import javax.annotation.PostConstruct;
 public class Main {
 
         private final UserService userService;
-
     public Main(UserService userService) {
         this.userService = userService;
     }

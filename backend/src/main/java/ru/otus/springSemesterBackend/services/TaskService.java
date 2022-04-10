@@ -1,4 +1,4 @@
-package ru.otus.springSemesterBackend.tasks;
+package ru.otus.springSemesterBackend.services;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.otus.springSemesterBackend.model.task.Task;
 import ru.otus.springSemesterBackend.model.task.repository.TaskRepository;
+import ru.otus.springSemesterBackend.tasks.Tree;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -25,6 +26,10 @@ public class TaskService {
 
     public Optional<Task> getTask(Long taskId) {
         return taskRepository.findById(taskId);
+    }
+
+    public java.util.List<Task> getAllTasks() {
+        return taskRepository.findAll();
     }
 
     public String getProjectTree(HttpServletResponse response,
@@ -51,11 +56,19 @@ public class TaskService {
 //            throw new RuntimeException(e);
 //        }
 
+
+
+
         //treesets to hold paths alphabetically
-        Path rootDirPath = Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task" + taskId);
-        Tree.Node node = walk(rootDirPath.toString());
-        System.out.println("kek"+node.children);
-        Gson gson = new Gson();
+//        Path rootDirPath = Path.of("C:\\Users\\smirn\\IdeaProjects\\SpringSemester\\backend\\src\\main\\resources\\tasks\\task" + taskId);
+//        Tree.Node node = walk(rootDirPath.toString());
+//        System.out.println("kek"+node.children);
+//        Gson gson = new Gson();
+
+
+
+
+
         //        TreeSet<Path> paths = new TreeSet<>();
 //        try {
 //            Files.walkFileTree(rootDirPath, new SimpleFileVisitor<Path>() {
@@ -97,7 +110,8 @@ public class TaskService {
 //        response.addHeader("Pragma", "no-cache");
 //        response.addHeader("Expires", "0");
 
-        return gson.toJson(node);
+//        return gson.toJson(node);
+        return null;
     }
 
     private Tree.Node walk( String path ) {

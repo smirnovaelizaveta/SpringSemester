@@ -1,4 +1,4 @@
-package ru.otus.springSemesterBackend.tasks;
+package ru.otus.springSemesterBackend.model.solution;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-
 public class UserSolutionStatus {
 
     @Id

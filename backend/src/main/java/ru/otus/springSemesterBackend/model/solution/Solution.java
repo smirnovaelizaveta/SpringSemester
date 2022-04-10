@@ -1,9 +1,10 @@
-package ru.otus.springSemesterBackend.model.attempt;
+package ru.otus.springSemesterBackend.model.solution;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.springSemesterBackend.tasks.UserSolutionStatus;
+import ru.otus.springSemesterBackend.model.solution.UserSolutionStatus;
+import ru.otus.springSemesterBackend.model.task.Task;
 
 import javax.persistence.*;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Attempt {
+public class Solution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,5 +27,8 @@ public class Attempt {
     private byte[] solutionCode;
 
     private String stackTrace;
+
+    @ManyToOne
+    private Task task;
 
 }

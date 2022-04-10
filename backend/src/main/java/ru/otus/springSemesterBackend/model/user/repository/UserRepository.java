@@ -1,4 +1,4 @@
-package ru.otus.springSemesterBackend.userService;
+package ru.otus.springSemesterBackend.model.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.springSemesterBackend.model.user.User;

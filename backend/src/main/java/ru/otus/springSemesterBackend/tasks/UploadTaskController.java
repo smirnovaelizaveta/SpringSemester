@@ -31,7 +31,6 @@ public class UploadTaskController {
             byte[] taskCode = dto.file.getInputStream().readAllBytes();
             final Task task = new Task(dto.name, dto.description, dto.difficultylevel, taskCode);
             taskRepository.save(task);
-//            taskInfo.setTask_id(task.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

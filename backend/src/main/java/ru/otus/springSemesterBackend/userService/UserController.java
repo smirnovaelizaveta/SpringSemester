@@ -5,7 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.springSemesterBackend.model.user.User;
-import ru.otus.springSemesterBackend.controller.dto.UserDto;
+import ru.otus.springSemesterBackend.controllers.dto.UserDto;
+import ru.otus.springSemesterBackend.services.DefaultUserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;

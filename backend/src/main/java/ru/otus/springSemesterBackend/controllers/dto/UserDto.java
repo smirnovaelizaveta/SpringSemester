@@ -1,8 +1,7 @@
-package ru.otus.springSemesterBackend.controller.dto;
+package ru.otus.springSemesterBackend.controllers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
