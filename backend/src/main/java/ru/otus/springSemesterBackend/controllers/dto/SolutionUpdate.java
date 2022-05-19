@@ -1,4 +1,4 @@
-package ru.otus.springSemesterBackend.websocket.dto;
+package ru.otus.springSemesterBackend.controllers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class SolutionUpdate {
     Long taskId;
+    Boolean checked;
     Boolean correct;
     String stackTrace;
 }

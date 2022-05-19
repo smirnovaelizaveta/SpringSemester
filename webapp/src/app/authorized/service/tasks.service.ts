@@ -10,14 +10,6 @@ import { MOCK_PROJECT } from '../mock/project';
 import { MOCK_SOLUTION } from '../mock/solution';
 import { SolutionService } from './solution.service'
 
-
-interface TaskDto {
-  id: number,
-  name: string,
-  description: string,
-  difficultylevel: number
-}
-
 @Injectable({ providedIn: 'root' })
 export class TasksService {
   constructor(
@@ -33,32 +25,13 @@ export class TasksService {
   private tasks = new BehaviorSubject<Task[]>([]);
 
   loadTasks() {
-    this.http.get<TaskDto[]>(this.taskUrl)
-      .pipe(
-        map((taskDtos) => taskDtos.map((dto) => Object(
-          {
-            id: dto.id,
-            name: dto.name,
-            description: dto.description,
-            difficultyLevel: dto.difficultylevel,
-            project: MOCK_PROJECT,
-            solution: MOCK_SOLUTION
-          }) as Task)),
-      )
+    this.http.get<Task[]>(this.taskUrl)
       .subscribe(
         tasks => this.tasks.next(tasks)
       )
 
-    this.solutionService.listenSolutionUpdates().subscribe(
-       update => this.tasks.next(
-         this.tasks.getValue().map(task => {
-           if(task.id === update.taskId) {
-             task.solution = update as Solution
-           }
-           return task;
-         })
-       )
-     )
+    this.solutionService.listenSolutionUpdates()
+      .subscribe(update => this.updateSolutionInTask(update.taskId, update as Solution))
   }
 
   getTasks(): Observable<Task[]> {
@@ -70,14 +43,11 @@ export class TasksService {
   }
 
   getProjectTree(taskId: number): Observable<Project> {
-    return this.http.get(this.taskUrl+`${taskId}/project-tree`)
-      .pipe(
-        map((result) => result as Project)
-      );
+    return this.http.get<Project>(this.taskUrl+`${taskId}/project-tree`)
   }
 
-  uploadCode(formData: FormData): Observable<any> {
-    return this.http.post('/api/solution', formData)
+  uploadCode(taskId: number, formData: FormData): Observable<any> {
+    return this.http.post(this.taskUrl+`${taskId}/solution/zip`, formData)
   }
 
   uploadTask(formData: FormData): Observable<any> {
@@ -85,5 +55,26 @@ export class TasksService {
     .pipe(
       tap(() => this.loadTasks())
     )
+  }
+
+  check(taskId: number, project: Project): Observable<Solution> {
+    return this.http.post<Solution>(this.taskUrl+`${taskId}/solution`, project)
+      .pipe(
+        tap(solution => this.updateSolutionInTask(taskId, solution)),
+        map(result => result as Solution)
+      )
+  }
+
+  private updateSolutionInTask(taskId: number, solution: Solution) {
+    console.log(solution);
+    this.tasks.next(
+       this.tasks.getValue().map(task => {
+         if(task.id === taskId) {
+           task.solution = solution
+         }
+         return task;
+       })
+     )
+    console.log(this.tasks.getValue())
   }
 }

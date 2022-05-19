@@ -21,6 +21,7 @@ public class Solution {
     @ManyToOne
     private UserSolutionStatus userSolutionStatus;
 
+    private boolean checked = false;
     private boolean correct;
 
     @Column(columnDefinition="blob")

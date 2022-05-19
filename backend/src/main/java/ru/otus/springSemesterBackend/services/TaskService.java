@@ -1,5 +1,6 @@
 package ru.otus.springSemesterBackend.services;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,12 +9,12 @@ import ru.otus.springSemesterBackend.model.task.repository.TaskRepository;
 import ru.otus.springSemesterBackend.controllers.dto.ProjectTreeDto;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class TaskService {
@@ -40,6 +41,37 @@ public class TaskService {
             }
             return builder.build();
         });
+    }
+
+    @SneakyThrows
+    public byte[] convertToZip(ProjectTreeDto dto) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
+        Deque<ProjectTreeDto.ProjectFile> stack = new ArrayDeque<>(dto.getFiles());
+
+        while(!stack.isEmpty()) {
+            ProjectTreeDto.ProjectFile file = stack.pop();
+            ZipEntry zipEntry = new ZipEntry(file.getName());
+            try {
+                zipOutputStream.putNextEntry(zipEntry);
+                zipOutputStream.write(file.getContent().getBytes());
+//                zipOutputStream.closeEntry();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            stack.addAll(file.getChildren());
+        }
+        zipOutputStream.close();
+
+        byte[] bytes = outputStream.toByteArray();
+        File file = new File("packed.zip");
+        try {
+            file.createNewFile();
+            Files.write(file.toPath(), bytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return bytes;
     }
 
     private ProjectTreeDto.ProjectFile getNextProjectFile(ZipInputStream zipInputStream) {

@@ -62,11 +62,12 @@
               </mat-tree>
             </div>
             <div class="code-container" fxFlex="75">
-                <ngx-codemirror *ngIf="selectedFile && selectedFile.content" fxFlex="100"
+                <ngx-codemirror *ngIf="selectedFile && selectedFile.content !== null" fxFlex="100"
                   [(ngModel)]="selectedFile.content"
                   [options]="{
                     lineNumbers: true,
-                    mode: 'clike'
+                    mode: getSyntax(selectedFile),
+                    readOnly: selectedFile.readonly
                   }">
                 </ngx-codemirror>
             </div>
@@ -76,19 +77,19 @@
         <mat-card-actions>
             <button mat-button (click)="download()">DOWNLOAD PROJECT</button>
             <button mat-button (click)="fileUpload.click()">UPLOAD PROJECT</button>
-            <!-- <span *ngIf="uploadFile">File: {{uploadFile}}</span> -->
             <input type="file" class="file-input" (change)="upload($event)" #fileUpload>
+            <button mat-button (click)="check()">CHECK</button>
         </mat-card-actions>
       </mat-card>
 
       <div *ngIf="selectedTask.solution as solution">
-        <mat-card *ngIf="solution.correct" class="solution-correct">
+        <mat-card *ngIf="solution.checked && solution.correct" class="solution-correct">
           <mat-card-title >
             <mat-icon>check_circle</mat-icon>
             Your solution is correct!
           </mat-card-title>
         </mat-card>
-        <mat-card *ngIf="solution.correct === false" class="solution-wrong">
+        <mat-card *ngIf="solution.checked && solution.correct === false" class="solution-wrong">
           <mat-card-title>
             <mat-icon>cancel</mat-icon>
             There are test failures.
@@ -99,13 +100,13 @@
             </p>
           </mat-card-content>
         </mat-card>
-        <mat-card *ngIf="solution.correct == null">
+        <mat-card *ngIf="!solution.checked">
           <mat-card-title>
             Your solution is being processed. Please wait.
           </mat-card-title>
-          <mat-card-actions>
-            <button mat-button>REFRESH</button>
-          </mat-card-actions>
+          <mat-card-content>
+            <mat-spinner></mat-spinner>
+          </mat-card-content>
         </mat-card>
       </div>
     </div>

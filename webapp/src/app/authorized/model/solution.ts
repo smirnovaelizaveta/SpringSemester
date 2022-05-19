@@ -1,5 +1,6 @@
 export interface Solution {
-	correct: boolean | null,
+	checked: boolean,
+	correct: boolean,
 	stackTrace?: string
 }
 

@@ -3,17 +3,20 @@ package ru.otus.springSemesterBackend.controllers.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class ProjectTreeDto {
     List<ProjectFile> files;
 
     @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class ProjectFile {
         String name;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.springSemesterBackend.mappers.SolutionUpdateMapper;
 import ru.otus.springSemesterBackend.model.solution.Solution;
 import ru.otus.springSemesterBackend.model.user.User;
-import ru.otus.springSemesterBackend.websocket.dto.SolutionUpdate;
+import ru.otus.springSemesterBackend.controllers.dto.SolutionUpdate;
 
 @Service
 public class WebSocketNotificationService implements NotificationService {

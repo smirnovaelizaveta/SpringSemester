@@ -56,7 +56,5 @@ public class TaskController {
                             return new ResponseEntity<>(taskMapper.toDto(task, userSolutionStatus), HttpStatus.OK);
                         })
                         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-
-
     }
 }

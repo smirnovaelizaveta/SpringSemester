@@ -23,6 +23,7 @@ export class EditorComponent implements OnInit {
   tasks?: Observable<Task[]>;
   selectedTask?: Task
   selectedFile: ProjectFile | undefined
+  project?: Project
   treeControl = new NestedTreeControl<ProjectFile>(node => node.children);
   dataSource = new MatTreeNestedDataSource<ProjectFile>();
   hasChild = (_: number, node: ProjectFile) => !!node.children && node.children.length > 0;
@@ -49,11 +50,11 @@ export class EditorComponent implements OnInit {
             this.tasksService.getProjectTree(this.selectedTask!.id)
             .subscribe(project => {
                 if(project) {
+                  this.project = project;
                   const data = project.files;
                   this.dataSource.data = data;
                   this.treeControl.dataNodes = data;
                   this.treeControl.expandAll();
-                  console.log(this.treeControl)
                 }
               }
             ) 
@@ -70,7 +71,6 @@ export class EditorComponent implements OnInit {
   @ViewChild('tree') tree: any;
 
   selectFile(file: ProjectFile) {
-    console.log(file);
     this.selectedFile = file;
   }
 
@@ -93,10 +93,14 @@ export class EditorComponent implements OnInit {
 
     if (file) {
       const formData = new FormData();
-      formData.append("taskId", `${this.selectedTask!.id}`)
+      // formData.append("taskId", `${this.selectedTask!.id}`)
       formData.append("file", file);
-      this.tasksService.uploadCode(formData).subscribe();
+      this.tasksService.uploadCode(this.selectedTask!.id, formData).subscribe();
     }
+  }
+
+  check() {
+    this.tasksService.check(this.selectedTask!.id, this.project!).subscribe()
   }
 
   displayName(projectFile: ProjectFile) {
@@ -106,5 +110,18 @@ export class EditorComponent implements OnInit {
     }
 
     return displayName.substring(displayName.lastIndexOf('/') + 1)
+  }
+
+  getSyntax(projectFile: ProjectFile) {
+    if(projectFile.name==='Dockerfile') {
+      return 'text/x-dockerfile'
+    }
+    switch(projectFile.name.substring(projectFile.name.lastIndexOf('.') + 1)) {
+      case 'java': return 'text/x-java';
+      case 'xml': return 'xml';
+      case 'properties': return 'text/x-properties';
+      case 'gitignore': return 'text/x-properties';
+      default: return 'clike';
+    }
   }
 }
