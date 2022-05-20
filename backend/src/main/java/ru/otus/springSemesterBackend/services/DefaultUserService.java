@@ -1,6 +1,7 @@
 package ru.otus.springSemesterBackend.services;
 
 import org.springframework.stereotype.Service;
+import ru.otus.springSemesterBackend.model.task.Task;
 import ru.otus.springSemesterBackend.model.user.User;
 import ru.otus.springSemesterBackend.model.user.repository.UserRepository;
 
@@ -21,5 +22,10 @@ public class DefaultUserService implements UserService {
     @Override
     public void insert(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public User findByUsername(String name) {
+        return userRepository.findByUsername(name);
     }
 }

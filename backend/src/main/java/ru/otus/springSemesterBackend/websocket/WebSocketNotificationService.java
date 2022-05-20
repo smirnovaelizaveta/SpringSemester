@@ -20,7 +20,7 @@ public class WebSocketNotificationService implements NotificationService {
 
     @Override
     public void notify(Solution solution) {
-        this.send(solutionUpdateMapper.toDto(solution), solution.getUserSolutionStatus().getUser());
+        this.send(solutionUpdateMapper.toDto(solution), solution.getUser());
     }
 
     public void send(SolutionUpdate solutionUpdate, User user) {

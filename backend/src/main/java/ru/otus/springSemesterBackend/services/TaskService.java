@@ -57,4 +57,8 @@ public class TaskService {
             throw new RuntimeException(e);
         }
     }
+
+    public Task getById(Long taskId) {
+        return taskRepository.getById(taskId);
+    }
 }

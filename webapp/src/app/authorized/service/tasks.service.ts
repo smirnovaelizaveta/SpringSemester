@@ -1,21 +1,20 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, BehaviorSubject} from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Task, Status } from '../model/task';
-import { Solution } from '../model/solution';
-import { Project } from '../model/project';
-import { MOCK_PROJECT } from '../mock/project';
-import { MOCK_SOLUTION } from '../mock/solution';
-import { SolutionService } from './solution.service'
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
+import {Status, Task} from '../model/task';
+import {Solution} from '../model/solution';
+import {Project} from '../model/project';
+import {SolutionService} from './solution.service'
 
 
 interface TaskDto {
   id: number,
   name: string,
   description: string,
-  difficultylevel: number
+  difficultylevel: number,
+  solution: Solution
 }
 
 @Injectable({ providedIn: 'root' })
@@ -28,7 +27,7 @@ export class TasksService {
     this.loadTasks();
   }
 
-  taskUrl: string = 'api/task/'; 
+  taskUrl: string = 'api/task/';
 
   private tasks = new BehaviorSubject<Task[]>([]);
 
@@ -41,8 +40,8 @@ export class TasksService {
             name: dto.name,
             description: dto.description,
             difficultyLevel: dto.difficultylevel,
-            project: MOCK_PROJECT,
-            solution: MOCK_SOLUTION
+            solution: dto.solution,
+            status: dto.solution ? (dto.solution.correct? Status.SOLVED : Status.IN_PROGRESS) : Status.NOT_STARTED
           }) as Task)),
       )
       .subscribe(
@@ -76,8 +75,8 @@ export class TasksService {
       );
   }
 
-  uploadCode(formData: FormData): Observable<any> {
-    return this.http.post('/api/solution', formData)
+  uploadCode(taskId: number, formData: FormData): Observable<any> {
+    return this.http.post(this.taskUrl+`${taskId}/solution`, formData)
   }
 
   uploadTask(formData: FormData): Observable<any> {

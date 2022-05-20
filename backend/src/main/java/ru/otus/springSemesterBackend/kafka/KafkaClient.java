@@ -40,8 +40,7 @@ public class KafkaClient {
         System.out.println("RECEIVED_MESSAGE_KEY is "+key);
         System.out.println("Body is "+solutionCheckJson);
         SolutionCheck solutionCheck = new Gson().fromJson(solutionCheckJson, SolutionCheck.class);
-//        CheckResult result = solutionProcessor.check(solutionZip);
-//        String message = new Gson().toJson(result);
+
         Optional<Solution> solutionOptional = solutionRepository.findById(key);
         Solution solution = solutionOptional.get();
         System.out.println("lol"+ solution.isCorrect());
@@ -49,8 +48,6 @@ public class KafkaClient {
         solution.setCorrect(solutionCheck.isCorrect());
         notificationService.notify(solution);
         solutionRepository.save(solution);
-//        kafkaTemplate.send(OUT_TOPIC, key, message);
-
     }
     public void send(Long key, byte[] solutionZip) {
         kafkaTemplate.send(OUT_TOPIC, key, solutionZip);

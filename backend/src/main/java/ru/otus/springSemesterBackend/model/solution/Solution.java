@@ -3,8 +3,8 @@ package ru.otus.springSemesterBackend.model.solution;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.springSemesterBackend.model.solution.UserSolutionStatus;
 import ru.otus.springSemesterBackend.model.task.Task;
+import ru.otus.springSemesterBackend.model.user.User;
 
 import javax.persistence.*;
 
@@ -18,9 +18,6 @@ public class Solution {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    private UserSolutionStatus userSolutionStatus;
-
     private boolean correct;
 
     @Column(columnDefinition="blob")
@@ -28,7 +25,19 @@ public class Solution {
 
     private String stackTrace;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Task.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "task_id")
     private Task task;
 
+    @ManyToOne(targetEntity = User.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private SolutionStatus solutionStatus;
+
+    public enum SolutionStatus {
+        NOT_STARTED,
+        IN_PROGRESS,
+        SOLVED;
+    }
 }

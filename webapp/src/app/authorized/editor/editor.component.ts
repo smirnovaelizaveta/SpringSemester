@@ -46,6 +46,7 @@ export class EditorComponent implements OnInit {
             window.alert(`Task with id ${taskId} does not exist.`)
             this.router.navigate(['/tasks'])
           } else {
+            console.log(this.selectedTask)
             this.tasksService.getProjectTree(this.selectedTask!.id)
             .subscribe(project => {
                 if(project) {
@@ -56,16 +57,16 @@ export class EditorComponent implements OnInit {
                   console.log(this.treeControl)
                 }
               }
-            ) 
+            )
           }
         })
        }
     })
-  }      
-  
+  }
+
 
     // this.tasksService.
-  
+
 
   @ViewChild('tree') tree: any;
 
@@ -93,9 +94,9 @@ export class EditorComponent implements OnInit {
 
     if (file) {
       const formData = new FormData();
-      formData.append("taskId", `${this.selectedTask!.id}`)
       formData.append("file", file);
-      this.tasksService.uploadCode(formData).subscribe();
+      this.tasksService.uploadCode(this.selectedTask!.id, formData)
+        .subscribe(() => this.selectedTask!.solution = {correct: null});
     }
   }
 

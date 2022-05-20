@@ -7,7 +7,7 @@ import { SolutionUpdate } from '../model/solution'
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 // export const WS_ENDPOINT = environment.wsEndpoint;
-  
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,10 +30,11 @@ export class SolutionService implements OnDestroy  {
   private init() {
     const ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
-    this.stompClient.debug = null;
+    // this.stompClient.debug = null;
     const _this = this;
     _this.stompClient.connect({}, (frame: any) => {
         _this.stompClient.subscribe(_this.topic, (message: any)  => {
+            console.log(message)
             _this.solutionUpdate.next(JSON.parse(message.body))
         });
     });
