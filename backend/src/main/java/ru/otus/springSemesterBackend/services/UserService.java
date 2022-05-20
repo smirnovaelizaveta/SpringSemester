@@ -7,6 +7,4 @@ public interface UserService {
     User getUser(String userName);
 
     void insert(User user);
-
-    User findByUsername(String name);
 }

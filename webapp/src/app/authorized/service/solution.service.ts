@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { Router } from '@angular/router';
 // import { environment } from '../../environments/environment';
 import { catchError, tap, switchAll } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
@@ -17,8 +18,10 @@ export class SolutionService implements OnDestroy  {
   topic: string = "/user/topic/solution";
   solutionUpdate: Subject<SolutionUpdate> = new Subject();
 
-  constructor() {
-    this.init();
+  constructor(private router: Router) {
+    if(sessionStorage.getItem("token")){
+      this.init();
+    }
   }
 
   ngOnDestroy() {
@@ -34,7 +37,6 @@ export class SolutionService implements OnDestroy  {
     const _this = this;
     _this.stompClient.connect({}, (frame: any) => {
         _this.stompClient.subscribe(_this.topic, (message: any)  => {
-            console.log(message)
             _this.solutionUpdate.next(JSON.parse(message.body))
         });
     });

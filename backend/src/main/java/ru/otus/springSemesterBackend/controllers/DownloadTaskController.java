@@ -24,14 +24,14 @@ public class DownloadTaskController {
     public ResponseEntity<StreamingResponseBody> getProjectZip(HttpServletResponse response,
                                                                @PathVariable(name = "taskId") Long taskId) {
         Task task = taskService.getTask(taskId)
-                .orElseThrow(()->new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
 
         StreamingResponseBody stream = out -> {
             out.write(task.getTaskCode());
         };
 
         response.setContentType("application/zip");
-        response.setHeader("Content-Disposition", "attachment; filename=" + task.getName()+".zip");
+        response.setHeader("Content-Disposition", "attachment; filename=" + task.getName() + ".zip");
         response.addHeader("Pragma", "no-cache");
         response.addHeader("Expires", "0");
 
@@ -39,11 +39,7 @@ public class DownloadTaskController {
     }
 
     @RequestMapping(path = "api/task/{taskId}/project-tree")
-    public ProjectTreeDto getProjectTree(@PathVariable(name = "taskId") Long taskId) {
-        return this.taskService.getProjectTree(taskId)
-                        .orElseThrow(()->new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
-
-
+    public ResponseEntity<ProjectTreeDto> getProjectTree(@PathVariable(name = "taskId") Long taskId) {
+        return ResponseEntity.of(this.taskService.getProjectTree(taskId));
     }
-
 }

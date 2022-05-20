@@ -1,22 +1,14 @@
 package ru.otus.springSemesterBackend.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.otus.springSemesterBackend.model.solution.Solution;
-import ru.otus.springSemesterBackend.model.solution.repository.SolutionRepository;
-import ru.otus.springSemesterBackend.model.task.Task;
+import ru.otus.springSemesterBackend.controllers.dto.ProjectTreeDto;
+import ru.otus.springSemesterBackend.controllers.dto.SolutionDto;
+import ru.otus.springSemesterBackend.model.solution.SolutionCheck;
 import ru.otus.springSemesterBackend.model.user.User;
 
-@Service
-public class SolutionService {
+public interface SolutionService {
+    void updateCheckedSolution(Long id, SolutionCheck solutionCheck);
 
-    @Autowired
-    private SolutionRepository solutionRepository;
+    SolutionDto updateSolution(ProjectTreeDto dto, Long taskId, User user);
 
-    public Solution findByTaskAndUser(Task task, User user)
-    {return solutionRepository.findByTaskAndUser(task, user);}
-
-    public void save(Solution solution) {
-        solutionRepository.save(solution);
-    }
+    SolutionDto updateSolution(byte[] code, Long taskId, User user);
 }

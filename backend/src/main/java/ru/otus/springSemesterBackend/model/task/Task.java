@@ -1,11 +1,9 @@
 package ru.otus.springSemesterBackend.model.task;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.File;
 
 
 @Data
@@ -18,14 +16,14 @@ public class Task {
     private Long id;
     private String name;
     private String description;
-    private Integer difficultylevel;
+    private Integer difficultyLevel;
     @Column(columnDefinition="blob")
     private byte[] taskCode;
 
-    public Task(String name, String description, Integer difficultylevel, byte[] taskCode) {
+    public Task(String name, String description, Integer difficultyLevel, byte[] taskCode) {
         this.name = name;
         this.description = description;
-        this.difficultylevel = difficultylevel;
+        this.difficultyLevel = difficultyLevel;
         this.taskCode = taskCode;
     }
 }

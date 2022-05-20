@@ -12,24 +12,25 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree'; 
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { EditorComponent } from './editor/editor.component'; 
 import { TasksComponent } from './tasks/tasks.component';
 import { Routes, RouterModule } from '@angular/router';
-import { MenuComponent } from './menu/menu.component';
 import { AuthorizedRoutingModule } from './authorized-routing.module';
 import { AuthorizedComponent } from './authorized.component';
 import { TasksService } from './service/tasks.service';
- import { MatTabsModule } from '@angular/material/tabs'; 
+import { SolutionService } from './service/solution.service';
+import { MatTabsModule } from '@angular/material/tabs'; 
 
 
 @NgModule({
   providers: [
-    TasksService
+    TasksService,
+    SolutionService
   ],
   declarations: [
     AuthorizedComponent,
-    MenuComponent,
     TasksComponent,
     EditorComponent
   ],
@@ -49,7 +50,8 @@ import { TasksService } from './service/tasks.service';
     MatInputModule,
     FormsModule,
     CodemirrorModule,
-    MatTabsModule
+    MatTabsModule,
+    MatProgressSpinnerModule
   ]
 })
 export class AuthorizedModule { }

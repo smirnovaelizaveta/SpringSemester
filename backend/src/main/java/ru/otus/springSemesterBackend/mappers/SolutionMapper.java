@@ -8,14 +8,5 @@ import ru.otus.springSemesterBackend.model.solution.Solution;
 
 @Mapper(componentModel="spring")
 public interface SolutionMapper {
-    @Mappings({
-  @Mapping(target="file", source = "solutionCode"),
-            @Mapping(target="taskId", source = "task.id")
-
-
-    })
     SolutionDto toDto(Solution solution);
-
-    Solution fromDto(SolutionDto solutionDto);
-
 }

@@ -12,10 +12,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class DefaultUserPrincipal
-        implements UserDetails
-{
-    private User user;
+public class DefaultUserPrincipal implements UserDetails {
+    private final User user;
 
     public DefaultUserPrincipal(User user) {
         this.user = user;

@@ -7,6 +7,8 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/xml/xml';
+import 'codemirror/mode/properties/properties';
+import 'codemirror/mode/dockerfile/dockerfile';
 
 if (environment.production) {
   enableProdMode();

@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         isValid => {
           if (isValid) {
-            this.router.navigate(["/"]);
+            this.router.navigate(["/"]).then(() => window.location.reload());
           } else {
             this.error = "Wrong password.";
           }

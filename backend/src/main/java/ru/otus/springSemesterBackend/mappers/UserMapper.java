@@ -8,6 +8,4 @@ import ru.otus.springSemesterBackend.model.user.User;
 public interface UserMapper {
 
     UserDto toDto(User user);
-
-    User fromDto(UserDto userDto);
 }

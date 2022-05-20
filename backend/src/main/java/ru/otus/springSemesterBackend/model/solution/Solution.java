@@ -18,6 +18,7 @@ public class Solution {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private boolean checked = false;
     private boolean correct;
 
     @Column(columnDefinition="blob")
@@ -32,12 +33,4 @@ public class Solution {
     @ManyToOne(targetEntity = User.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-
-    private SolutionStatus solutionStatus;
-
-    public enum SolutionStatus {
-        NOT_STARTED,
-        IN_PROGRESS,
-        SOLVED;
-    }
 }

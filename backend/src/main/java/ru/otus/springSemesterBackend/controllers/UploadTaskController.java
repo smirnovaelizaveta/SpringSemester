@@ -4,36 +4,23 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.otus.springSemesterBackend.controllers.dto.TaskCreationDto;
+import ru.otus.springSemesterBackend.controllers.dto.TaskDto;
 import ru.otus.springSemesterBackend.model.task.Task;
 import ru.otus.springSemesterBackend.model.task.repository.TaskRepository;
+import ru.otus.springSemesterBackend.services.TaskService;
 
 import java.io.IOException;
 
 @RestController
 public class UploadTaskController {
 
-    @Data
-    class TaskDto {
-        String name;
-        String description;
-        Integer difficultylevel;
-        MultipartFile file;
-    }
-
     @Autowired
-    private TaskRepository taskRepository;
+    private TaskService taskService;
 
     @PostMapping("api/task")
-    public void uploadTaskInfo(
-            @ModelAttribute TaskDto dto
-    ) {
-        try {
-            byte[] taskCode = dto.file.getInputStream().readAllBytes();
-            final Task task = new Task(dto.name, dto.description, dto.difficultylevel, taskCode);
-            taskRepository.save(task);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void uploadTaskInfo(@ModelAttribute TaskCreationDto dto) {
+        taskService.createTask(dto);
     }
 }
 

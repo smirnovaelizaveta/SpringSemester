@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { TasksService } from '../service/tasks.service';
 import { SolutionService } from '../service/solution.service';
-import { Status, Task } from '../model/task';
+import { Task } from '../model/task';
 import { Solution } from '../model/solution'
 import { Project, ProjectFile } from '../model/project';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -18,11 +18,10 @@ import { map, tap, flatMap } from 'rxjs/operators';
 })
 export class EditorComponent implements OnInit {
 
-  public Status: any = Status;
-
   tasks?: Observable<Task[]>;
   selectedTask?: Task
   selectedFile: ProjectFile | undefined
+  project?: Project
   treeControl = new NestedTreeControl<ProjectFile>(node => node.children);
   dataSource = new MatTreeNestedDataSource<ProjectFile>();
   hasChild = (_: number, node: ProjectFile) => !!node.children && node.children.length > 0;
@@ -46,18 +45,19 @@ export class EditorComponent implements OnInit {
             window.alert(`Task with id ${taskId} does not exist.`)
             this.router.navigate(['/tasks'])
           } else {
-            console.log(this.selectedTask)
-            this.tasksService.getProjectTree(this.selectedTask!.id)
-            .subscribe(project => {
-                if(project) {
-                  const data = project.files;
-                  this.dataSource.data = data;
-                  this.treeControl.dataNodes = data;
-                  this.treeControl.expandAll();
-                  console.log(this.treeControl)
-                }
-              }
-            )
+            if(!this.project){
+              this.tasksService.getProjectTree(this.selectedTask!.id)
+                .subscribe(project => {
+                    if(project) {
+                      this.project = project;
+                      const data = project.files;
+                      this.dataSource.data = data;
+                      this.treeControl.dataNodes = data;
+                      this.treeControl.expandAll();
+                      this.selectMainFile();
+                    }
+                  })
+            }
           }
         })
        }
@@ -71,19 +71,33 @@ export class EditorComponent implements OnInit {
   @ViewChild('tree') tree: any;
 
   selectFile(file: ProjectFile) {
-    console.log(file);
     this.selectedFile = file;
+  }
+
+  selectMainFile() {
+    let file = this.treeControl.dataNodes
+      ?.find(file => file.name=="src/")?.children
+      ?.find(file => file.name=="src/main/")?.children
+      ?.find(file => file.name=="src/main/java/")?.children
+      ?.find(file => file.name=="src/main/java/com/")?.children
+      ?.find(file => file.name=="src/main/java/com/springSemester/")?.children?.[0].children
+      ?.find(file => file.content?.length!!>0)
+
+
+    console.log(file)
+    if(file != null) 
+      this.selectFile(file)
   }
 
   download(format: String = "zip"): void {
     this.tasksService.downloadCode(this.selectedTask!.id)
-      .subscribe(([task, response]) => {
+      .subscribe(response => {
           let dataType = response.type;
           let binaryData = [];
           binaryData.push(response);
           let downloadLink = document.createElement('a');
           downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
-          downloadLink.setAttribute('download', `task${task!.id}.${format}`);
+          downloadLink.setAttribute('download', `${this.selectedTask!.id}.${format}`);
           document.body.appendChild(downloadLink);
           downloadLink.click();
         });
@@ -96,8 +110,13 @@ export class EditorComponent implements OnInit {
       const formData = new FormData();
       formData.append("file", file);
       this.tasksService.uploadCode(this.selectedTask!.id, formData)
-        .subscribe(() => this.selectedTask!.solution = {correct: null});
+        .subscribe(response => this.selectedTask!.solution = response);
     }
+  }
+
+  check() {
+    this.tasksService.check(this.selectedTask!.id, this.project!)
+        .subscribe(response => this.selectedTask!.solution = response);
   }
 
   displayName(projectFile: ProjectFile) {
@@ -107,5 +126,18 @@ export class EditorComponent implements OnInit {
     }
 
     return displayName.substring(displayName.lastIndexOf('/') + 1)
+  }
+
+  getSyntax(projectFile: ProjectFile) {
+    if(projectFile.name==='Dockerfile') {
+      return 'text/x-dockerfile'
+    }
+    switch(projectFile.name.substring(projectFile.name.lastIndexOf('.') + 1)) {
+      case 'java': return 'text/x-java';
+      case 'xml': return 'xml';
+      case 'properties': return 'text/x-properties';
+      case 'gitignore': return 'text/x-properties';
+      default: return 'clike';
+    }
   }
 }

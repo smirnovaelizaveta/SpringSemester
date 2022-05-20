@@ -26,7 +26,6 @@ public class KafkaClient {
 
     @KafkaListener(topics = IN_TOPIC, groupId = "group_id")
     public void process(@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) Long key, @Payload byte[] solutionZip) {
-        System.out.println("RECEIVED_MESSAGE_KEY is "+key);
         SolutionCheck result = solutionProcessor.check(solutionZip);
         String message = new Gson().toJson(result);
         kafkaTemplate.send(OUT_TOPIC, key, message);

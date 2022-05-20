@@ -9,9 +9,7 @@ import ru.otus.springSemesterBackend.model.user.User;
 import ru.otus.springSemesterBackend.model.user.repository.UserRepository;
 
 @Service
-public class DefaultUserDetailsService
-        implements UserDetailsService
-{
+public class DefaultUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -24,6 +22,4 @@ public class DefaultUserDetailsService
         }
         return new DefaultUserPrincipal(user);
     }
-
-
 }

@@ -12,6 +12,7 @@ import ru.otus.springSemesterBackend.controllers.dto.TaskDto;
 import ru.otus.springSemesterBackend.mappers.TaskMapper;
 import ru.otus.springSemesterBackend.model.solution.Solution;
 import ru.otus.springSemesterBackend.model.solution.repository.SolutionRepository;
+import ru.otus.springSemesterBackend.services.SolutionService;
 import ru.otus.springSemesterBackend.services.TaskService;
 import ru.otus.springSemesterBackend.services.UserService;
 
@@ -27,35 +28,15 @@ public class TaskController {
     private TaskService taskService;
 
     @Autowired
-    private SolutionRepository solutionRepository;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
-    private TaskMapper taskMapper;
 
     @RequestMapping(path = "api/task", method = RequestMethod.GET)
     public List<TaskDto> getAllTasks(Principal principal) {
-        return taskService.getAllTasks().stream()
-                .map(task -> {
-                    Solution solution = solutionRepository.findByTaskAndUser(task, userService.getUser(principal.getName()));
-                    return taskMapper.toDto(task, solution);
-                }).collect(Collectors.toList());
+        return taskService.getAllTasksForUser(userService.getUser(principal.getName()));
     }
 
     @RequestMapping(path = "api/task/{taskId}", method = RequestMethod.GET)
-    public ResponseEntity getTask(@PathVariable(name = "taskId") Long taskId, @AuthenticationPrincipal Principal principal) {
-        String userName = (principal.getName() != null) ? principal.getName() : "anonymous";
-
-        return
-                taskService.getTask(taskId)
-                        .map(task -> {
-                            Solution solution = solutionRepository.findByTaskAndUser(task, userService.getUser(principal.getName()));
-                            return new ResponseEntity<>(taskMapper.toDto(task, solution), HttpStatus.OK);
-                        })
-                        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-
-
+    public ResponseEntity<TaskDto> getTask(@PathVariable(name = "taskId") Long taskId, @AuthenticationPrincipal Principal principal) {
+        return ResponseEntity.of(taskService.getTaskForUser(taskId, userService.getUser(principal.getName())));
     }
 }

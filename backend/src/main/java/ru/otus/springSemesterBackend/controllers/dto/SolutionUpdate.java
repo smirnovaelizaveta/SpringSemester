@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SolutionDto {
-    private Long id;
-    private boolean checked;
-    private boolean correct;
+public class SolutionUpdate {
+    private Long taskId;
+    private Boolean checked;
+    private Boolean correct;
     private String stackTrace;
 }

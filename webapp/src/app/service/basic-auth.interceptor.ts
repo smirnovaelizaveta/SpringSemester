@@ -11,6 +11,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     constructor(private router: Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log("intercepted request", request)
         request = request.clone({
              setHeaders: { 
                  "X-Requested-With": "XMLHttpRequest"

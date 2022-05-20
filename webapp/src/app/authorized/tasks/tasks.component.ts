@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TasksService } from '../service/tasks.service';
-import { Status, Task } from '../model/task';
+import { Task } from '../model/task';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 export class TasksComponent implements OnInit {
   constructor(private tasksService: TasksService) { }
 
-  public Status: any = Status;
   tasks?: Observable<Task[]>;
   name: string = "";
   description: string = "";

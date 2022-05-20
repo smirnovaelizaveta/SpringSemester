@@ -38,30 +38,13 @@ public class DefaultDockerService implements DockerService {
                 .responseTimeout(Duration.ofSeconds(45))
                 .build();
 
-//        DockerHttpClient.Request request = DockerHttpClient.Request.builder()
-//                .method(DockerHttpClient.Request.Method.GET)
-//                .path("/_ping")
-//                .build();
-//
-//
-//        try (DockerHttpClient.Response response = httpClient.execute(request)) {
-//            System.out.println(response.getStatusCode());
-//            System.out.println(response.getBody());
-//        }
         DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
         String imageId = dockerClient.buildImageCmd(new File(dockerfile))
-                .withTags(Set.of("buns:0.0.1"))
                 .start().awaitImageId();
 
         CreateContainerResponse container
                 = dockerClient.createContainerCmd(imageId)
-//                .withCmd("--bind_ip_all")
-//                .withName("mongo")
-//                .withHostName("baeldung")
-//                .withEnv("MONGO_LATEST_VERSION=3.6")
-//                .withPortBindings(PortBinding.parse("9999:27017"))
-//                .withBinds(Bind.parse("/Users/baeldung/mongo/data/db:/data/db"))
                 .exec();
 
         dockerClient.startContainerCmd(container.getId()).exec();
@@ -86,8 +69,6 @@ public class DefaultDockerService implements DockerService {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-//        System.out.println("BUNSBUNS"+response);
 
         dockerClient.removeContainerCmd(container.getId()).exec();
         return logs.stream()
